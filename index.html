@@ -3,65 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diabetes Training System</title>
+    <title>당뇨약 처방 시뮬레이션 교육</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
         body { font-family: 'Pretendard', sans-serif; background-color: #f1f5f9; }
-        .active-step { display: block !important; }
-        .option-card { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
-        .option-card:hover { transform: scale(1.02); border-color: #2563eb; background-color: #eff6ff; }
         .step-content { display: none; }
         .step-content.active { display: block; }
+        .option-card { cursor: pointer; transition: all 0.2s; border: 2px solid #f1f5f9; }
+        .option-card:hover { border-color: #3b82f6; background-color: #eff6ff; transform: translateY(-2px); }
     </style>
 </head>
 <body class="min-h-screen">
-    <div id="app" class="max-w-4xl mx-auto px-4 py-8">
+    <div id="app" class="max-w-xl mx-auto px-4 py-8">
         
-        <!-- Admin Navigation (Hidden initially) -->
-        <div id="admin-nav" class="hidden flex justify-center mb-8">
-            <div class="bg-white p-1 rounded-2xl shadow-sm border border-gray-200 flex space-x-1">
-                <button onclick="switchView('user')" id="nav-user" class="px-6 py-2 rounded-xl font-bold text-sm bg-blue-600 text-white">시뮬레이션</button>
-                <button onclick="switchView('admin')" id="nav-admin" class="px-6 py-2 rounded-xl font-bold text-sm text-gray-500 hover:bg-gray-50">결과 대시보드</button>
+        <!-- [1] 정보 입력 화면 -->
+        <div id="step-register" class="step-content active bg-white rounded-3xl p-8 shadow-xl border border-gray-100">
+            <div class="text-center mb-8">
+                <div class="text-5xl mb-4">🩺</div>
+                <h1 class="text-2xl font-bold text-gray-800">당뇨약 처방 트레이닝</h1>
+                <p class="text-gray-500 mt-2 text-sm">정보를 입력하고 테스트를 시작하세요.</p>
             </div>
-        </div>
-
-        <!-- [STEP 1] Registration -->
-        <div id="step-register" class="step-content active bg-white rounded-3xl p-10 shadow-xl border border-gray-100 max-w-xl mx-auto">
-            <div class="text-center mb-10">
-                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6 shadow-inner">🩺</div>
-                <h1 class="text-2xl font-black text-gray-800 tracking-tight">당뇨약 처방 트레이닝</h1>
-                <p class="text-gray-500 mt-2 font-medium text-sm italic">영업 담당자 교육용 시뮬레이션</p>
-            </div>
-            <form id="reg-form" class="space-y-5">
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="text-xs font-bold text-gray-400 uppercase ml-1">사업부</label>
-                        <input type="text" id="user-dept" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl outline-none focus:border-blue-500" placeholder="사업부">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-400 uppercase ml-1">팀</label>
-                        <input type="text" id="user-team" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl outline-none focus:border-blue-500" placeholder="팀명">
-                    </div>
+            <form id="reg-form" class="space-y-4">
+                <div class="grid grid-cols-2 gap-3">
+                    <input type="text" id="user-dept" required class="w-full px-4 py-3 border rounded-xl outline-none focus:border-blue-500" placeholder="사업부">
+                    <input type="text" id="user-team" required class="w-full px-4 py-3 border rounded-xl outline-none focus:border-blue-500" placeholder="팀명">
                 </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase ml-1">사번</label>
-                    <input type="text" id="user-id" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl outline-none focus:border-blue-500" placeholder="사번(ID)">
-                </div>
-                <div>
-                    <label class="text-xs font-bold text-gray-400 uppercase ml-1">담당자명</label>
-                    <input type="text" id="user-name" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl outline-none focus:border-blue-500" placeholder="성함">
-                </div>
-                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-700 shadow-lg transition-all mt-6">테스트 시작</button>
+                <input type="text" id="user-id" required class="w-full px-4 py-3 border rounded-xl outline-none focus:border-blue-500" placeholder="사번">
+                <input type="text" id="user-name" required class="w-full px-4 py-3 border rounded-xl outline-none focus:border-blue-500" placeholder="성함">
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all shadow-lg shadow-blue-100">테스트 시작</button>
             </form>
         </div>
 
-        <!-- [STEP 2] Game -->
-        <div id="step-game" class="step-content max-w-2xl mx-auto">
-            <div class="flex justify-between items-end mb-8">
+        <!-- [2] 게임 화면 -->
+        <div id="step-game" class="step-content">
+            <div class="flex justify-between items-end mb-6">
                 <div>
-                    <div class="text-gray-400 text-xs font-bold uppercase">Ongoing Case</div>
-                    <div class="text-3xl font-black text-gray-800">환자 #<span id="current-num">1</span></div>
+                    <div class="text-gray-400 text-xs font-bold uppercase">Case</div>
+                    <div class="text-3xl font-black text-gray-800">#<span id="current-num">1</span></div>
                 </div>
                 <div class="text-right">
                     <div class="text-gray-400 text-xs font-bold uppercase">Score</div>
@@ -69,141 +48,90 @@
                 </div>
             </div>
 
-            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 mb-8 relative">
-                <h2 class="text-xl font-bold mb-6 text-gray-800" id="case-description"></h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">HbA1c</div>
-                        <div id="val-hba1c" class="text-lg font-black text-red-500"></div>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">eGFR</div>
-                        <div id="val-egfr" class="text-lg font-black text-blue-600"></div>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">BMI</div>
-                        <div id="val-bmi" class="text-lg font-black text-gray-700"></div>
-                    </div>
-                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
-                        <div class="text-[10px] font-bold text-gray-400 uppercase">Age</div>
-                        <div id="val-age" class="text-lg font-black text-gray-700"></div>
-                    </div>
+            <div class="bg-white rounded-2xl p-6 shadow-md mb-6 border-t-4 border-blue-500">
+                <h2 class="text-lg font-bold mb-4 text-gray-800" id="case-description"></h2>
+                <div class="grid grid-cols-2 gap-2 text-center text-xs">
+                    <div class="bg-gray-50 p-2 rounded-lg border">HbA1c: <span id="val-hba1c" class="font-bold text-red-500"></span></div>
+                    <div class="bg-gray-50 p-2 rounded-lg border">eGFR: <span id="val-egfr" class="font-bold text-blue-600"></span></div>
+                    <div class="bg-gray-50 p-2 rounded-lg border">BMI: <span id="val-bmi" class="font-bold"></span></div>
+                    <div class="bg-gray-50 p-2 rounded-lg border">나이: <span id="val-age" class="font-bold"></span></div>
                 </div>
             </div>
-            <div class="grid grid-cols-1 gap-4" id="options-container"></div>
+            <div id="options-container" class="space-y-3"></div>
         </div>
 
-        <!-- [STEP 3] Result -->
-        <div id="step-result" class="step-content text-center bg-white rounded-3xl p-12 shadow-2xl max-w-xl mx-auto">
-            <div id="result-emoji" class="text-8xl mb-6"></div>
-            <h2 class="text-3xl font-black mb-2 text-gray-800" id="result-title"></h2>
-            <p class="text-gray-500 mb-10 font-medium" id="result-msg"></p>
-            <div class="bg-blue-50 p-8 rounded-3xl mb-10">
-                <div class="text-xs text-blue-600 font-bold uppercase mb-2">Final Score</div>
-                <div class="text-6xl font-black text-blue-900"><span id="final-score">0</span> <span class="text-2xl text-blue-300">/ 5</span></div>
+        <!-- [3] 결과 화면 -->
+        <div id="step-result" class="step-content text-center bg-white rounded-3xl p-10 shadow-xl">
+            <div id="result-emoji" class="text-7xl mb-4"></div>
+            <h2 class="text-2xl font-bold mb-2 text-gray-800" id="result-title"></h2>
+            <p class="text-gray-500 mb-8" id="result-msg"></p>
+            <div class="bg-blue-50 p-6 rounded-2xl mb-8">
+                <div class="text-xs text-blue-600 font-bold uppercase mb-1">최종 점수</div>
+                <div class="text-5xl font-black text-blue-900"><span id="final-score">0</span> / 5</div>
             </div>
-            <p id="save-status" class="text-xs text-gray-400 mb-6 italic"></p>
-            <button onclick="location.reload()" class="text-blue-600 font-bold">↺ 처음부터 다시하기</button>
+            <p id="save-status" class="text-xs text-gray-400 mb-4 italic"></p>
+            <button onclick="location.reload()" class="text-blue-600 font-bold hover:underline">↺ 다시 도전하기</button>
+            <div class="mt-8 pt-6 border-t border-gray-100" id="admin-area">
+                <button onclick="showAdmin()" class="text-xs text-gray-300">관리자 데이터 확인 (본인 기기용)</button>
+            </div>
         </div>
 
-        <!-- [STEP 4] Admin Dashboard -->
-        <div id="step-admin" class="step-content">
-            <div class="flex justify-between items-center mb-8">
-                <h2 class="text-3xl font-black text-gray-800">Performance Data</h2>
-                <div class="flex space-x-2">
-                    <button onclick="refreshData()" class="px-4 py-2 bg-white border rounded-xl text-sm font-bold shadow-sm">🔄 새로고침</button>
-                    <button onclick="exportToExcel()" class="px-4 py-2 bg-green-600 text-white rounded-xl text-sm font-bold shadow-sm">📊 엑셀 다운로드</button>
+        <!-- [4] 관리자 화면 (팝업형태) -->
+        <div id="admin-modal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-[200]">
+            <div class="bg-white w-full max-w-2xl rounded-2xl p-6 max-h-[80vh] overflow-y-auto">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold">이수자 명단 (현재 기기)</h3>
+                    <button onclick="closeAdmin()" class="text-gray-400 text-2xl">&times;</button>
+                </div>
+                <div class="mb-4">
+                    <button onclick="exportCSV()" class="bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-bold">📊 엑셀 다운로드</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-gray-50">
+                            <tr>
+                                <th class="p-3 border-b">성명</th>
+                                <th class="p-3 border-b">소속</th>
+                                <th class="p-3 border-b">사번</th>
+                                <th class="p-3 border-b text-center">점수</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-tbody"></tbody>
+                    </table>
                 </div>
             </div>
-            <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-gray-100">
-                <table class="w-full text-left">
-                    <thead class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase">
-                        <tr>
-                            <th class="px-8 py-5">응시 일시</th>
-                            <th class="px-8 py-5">사업부/팀</th>
-                            <th class="px-8 py-5">이름(사번)</th>
-                            <th class="px-8 py-5 text-center">점수</th>
-                        </tr>
-                    </thead>
-                    <tbody id="admin-tbody" class="divide-y divide-gray-50"></tbody>
-                </table>
-            </div>
         </div>
     </div>
 
-    <!-- Hidden Admin Toggle -->
-    <div class="fixed bottom-6 right-6 opacity-20 hover:opacity-100 transition-opacity">
-        <button onclick="toggleAdmin()" class="w-12 h-12 bg-white border rounded-full shadow-lg">⚙️</button>
-    </div>
-
-    <!-- Modal -->
-    <div id="modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-6 z-[100]">
-        <div class="bg-white rounded-[40px] p-10 max-w-sm w-full shadow-2xl text-center">
-            <div id="modal-icon" class="text-6xl mb-6"></div>
-            <h3 id="modal-title" class="text-2xl font-black mb-3"></h3>
-            <p id="modal-body" class="text-gray-500 mb-10 font-medium"></p>
-            <button id="modal-btn" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black">확인</button>
+    <!-- Feedback Modal -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black/40 hidden items-center justify-center p-6 z-[100]">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl text-center">
+            <div id="modal-icon" class="text-5xl mb-4"></div>
+            <h3 id="modal-title" class="text-xl font-bold mb-2"></h3>
+            <p id="modal-body" class="text-gray-500 mb-8 text-sm leading-relaxed"></p>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-4 rounded-xl font-bold">확인</button>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-        // --- Firebase Config Logic ---
-        // 깃허브에서 사용하려면 자신의 Firebase Config를 아래 주석 부분에 붙여넣어야 합니다.
-        // 현재는 서버가 없어도 게임은 진행되도록 예외 처리를 해두었습니다.
-        let db, auth;
-        let appId = "diabetes-training-game";
-        
-        const initFirebase = async () => {
-            try {
-                let config = null;
-                // 1. 시스템 자동 설정 확인 (Canvas 환경용)
-                if (typeof __firebase_config !== 'undefined') {
-                    config = JSON.parse(__firebase_config);
-                    appId = typeof __app_id !== 'undefined' ? __app_id : appId;
-                } 
-                // 2. 수동 설정 (여기에 자신의 Config를 넣으세요)
-                /* else {
-                    config = { apiKey: "...", authDomain: "...", ... };
-                } 
-                */
-
-                if (config) {
-                    const app = initializeApp(config);
-                    db = getFirestore(app);
-                    auth = getAuth(app);
-                    await signInAnonymously(auth);
-                }
-            } catch (e) {
-                console.warn("Firebase를 초기화할 수 없습니다. 데이터 저장 기능 없이 게임을 시작합니다.");
-            }
-        };
-
-        // --- Case Data ---
+    <script>
+        // --- Game Data ---
         const cases = [
-            { age: 48, hba1c: 8.4, egfr: 92, bmi: 29, desc: "신규 진단 환자입니다. 체중 관리가 필요하며 다른 합병증은 없는 상태입니다. 1차 치료제는?", options: [{name:'Metformin', score:1, feedback:'정답입니다!'}, {name:'DPP-4i', score:0, feedback:'1순위는 메트포르민입니다.'}, {name:'SU', score:0, feedback:'저혈당 위험이 있습니다.'}] },
-            { age: 62, hba1c: 7.9, egfr: 25, bmi: 24, desc: "신기능이 상당히 저하된(eGFR 30 미만) 환자에게 절대 금기인 약은?", options: [{name:'Linagliptin', score:0, feedback:'안전합니다.'}, {name:'Metformin', score:1, feedback:'정답! 유산산증 위험으로 금기입니다.'}, {name:'SGLT2i', score:0, feedback:'효과가 미비합니다.'}] },
-            { age: 55, hba1c: 8.1, egfr: 85, bmi: 31, desc: "심부전 이력이 있는 환자에게 심부전 악화 방지에 도움을 주는 약제는?", options: [{name:'SGLT2i', score:1, feedback:'정답입니다!'}, {name:'DPP-4i', score:0, feedback:'이득이 없습니다.'}, {name:'Pioglitazone', score:0, feedback:'부종 위험이 있습니다.'}] },
-            { age: 78, hba1c: 7.2, egfr: 55, bmi: 21, desc: "식사가 불규칙한 고령 환자에게 가장 안전한 약제는?", options: [{name:'DPP-4i', score:1, feedback:'정답입니다!'}, {name:'SU', score:0, feedback:'저혈당 위험이 매우 큽니다.'}, {name:'Metformin', score:0, feedback:'위장관 부작용이 우려됩니다.'}] },
-            { age: 50, hba1c: 9.8, egfr: 88, bmi: 33, desc: "혈당이 매우 높고 고도비만인 환자에게 가장 강력한 선택은?", options: [{name:'GLP-1 RA', score:1, feedback:'정답입니다!'}, {name:'DPP-4i', score:0, feedback:'효과가 부족할 수 있습니다.'}, {name:'SU', score:0, feedback:'체중을 늘릴 수 있습니다.'}] }
+            { age: 48, hba1c: 8.4, egfr: 92, bmi: 29, desc: "신규 진단 환자입니다. 체중 관리가 필요하며 다른 합병증은 없는 상태입니다. 1차 치료제는?", options: [{name:'Metformin', score:1, msg:'정답입니다! 가이드라인 1차 약제입니다.'}, {name:'DPP-4i', score:0, msg:'1순위는 메트포르민입니다.'}, {name:'SU', score:0, msg:'저혈당 위험이 큽니다.'}] },
+            { age: 62, hba1c: 7.9, egfr: 25, bmi: 24, desc: "신기능이 현저히 저하된(eGFR 30 미만) 환자에게 절대 금기인 약제는?", options: [{name:'리나글립틴', score:0, msg:'안전합니다.'}, {name:'메트포르민', score:1, msg:'정답! 유산산증 위험으로 금기입니다.'}, {name:'SGLT2i', score:0, msg:'효과가 거의 없습니다.'}] },
+            { age: 55, hba1c: 8.1, egfr: 85, bmi: 31, desc: "심부전 이력이 있는 환자에게 심부전 입원 감소 효과가 증명된 약제는?", options: [{name:'SGLT2 억제제', score:1, msg:'정답입니다!'}, {name:'DPP-4 억제제', score:0, msg:'이득이 없습니다.'}, {name:'피오글리타존', score:0, msg:'부종 위험이 있습니다.'}] },
+            { age: 79, hba1c: 7.4, egfr: 52, bmi: 21, desc: "식사가 불규칙한 고령 환자에게 가장 안전한 약제는?", options: [{name:'DPP-4 억제제', score:1, msg:'정답입니다!'}, {name:'설포닐우레아', score:0, msg:'저혈당 위험이 치명적입니다.'}, {name:'메트포르민', score:0, msg:'식욕 부진 가능성이 있습니다.'}] },
+            { age: 50, hba1c: 9.8, egfr: 88, bmi: 33, desc: "혈당이 매우 높고 고도비만인 환자에게 가장 강력한 선택은?", options: [{name:'GLP-1 RA', score:1, msg:'정답입니다!'}, {name:'DPP-4 억제제', score:0, msg:'강화가 필요합니다.'}, {name:'SGLT2 억제제', score:0, msg:'좋으나 GLP-1이 더 강력합니다.'}] }
         ];
 
         let state = { currentIdx: 0, score: 0, userInfo: {} };
 
-        // --- Game Logic ---
-        window.switchView = (page) => {
+        // --- Core Functions ---
+        const switchPage = (id) => {
             document.querySelectorAll('.step-content').forEach(s => s.classList.remove('active'));
-            document.getElementById('step-' + (page === 'admin' ? 'admin' : 'register')).classList.add('active');
+            document.getElementById('step-' + id).classList.add('active');
         };
 
-        window.toggleAdmin = () => {
-            document.getElementById('admin-nav').classList.toggle('hidden');
-            switchView('admin');
-        };
-
+        // Form Submit
         document.getElementById('reg-form').onsubmit = (e) => {
             e.preventDefault();
             state.userInfo = {
@@ -212,8 +140,7 @@
                 empId: document.getElementById('user-id').value,
                 name: document.getElementById('user-name').value
             };
-            document.getElementById('step-register').classList.remove('active');
-            document.getElementById('step-game').classList.add('active');
+            switchPage('game');
             renderCase();
         };
 
@@ -230,90 +157,90 @@
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             c.options.forEach(opt => {
-                const btn = document.createElement('div');
-                btn.className = "option-card bg-white p-5 border-2 rounded-3xl font-bold text-gray-700 shadow-sm";
-                btn.innerText = opt.name;
-                btn.onclick = () => {
-                    state.score += opt.score;
-                    const modal = document.getElementById('modal');
-                    document.getElementById('modal-icon').innerText = opt.score > 0 ? "🎯" : "❌";
-                    document.getElementById('modal-title').innerText = opt.score > 0 ? "정답!" : "오답";
-                    document.getElementById('modal-body').innerText = opt.feedback;
-                    modal.classList.remove('hidden');
-                    document.getElementById('modal-btn').onclick = () => {
-                        modal.classList.add('hidden');
-                        state.currentIdx++;
-                        if (state.currentIdx < cases.length) renderCase();
-                        else finishGame();
-                    };
-                };
-                container.appendChild(btn);
+                const b = document.createElement('div');
+                b.className = "option-card bg-white p-5 rounded-2xl font-bold text-gray-700 shadow-sm border";
+                b.innerText = opt.name;
+                b.onclick = () => showFeedback(opt.score > 0, opt.msg, opt.score);
+                container.appendChild(b);
             });
         };
 
-        const finishGame = async () => {
-            document.getElementById('step-game').classList.remove('active');
-            document.getElementById('step-result').classList.add('active');
+        const showFeedback = (isOk, msg, plus) => {
+            state.score += plus;
+            const modal = document.getElementById('feedback-modal');
+            document.getElementById('modal-icon').innerText = isOk ? "🎯" : "❌";
+            document.getElementById('modal-title').innerText = isOk ? "정답입니다!" : "오답입니다.";
+            document.getElementById('modal-body').innerText = msg;
+            modal.style.display = 'flex';
+
+            document.getElementById('modal-btn').onclick = () => {
+                modal.style.display = 'none';
+                state.currentIdx++;
+                if (state.currentIdx < cases.length) renderCase();
+                else finish();
+            };
+        };
+
+        const finish = () => {
+            switchPage('result');
             document.getElementById('final-score').innerText = state.score;
-            
             const rTitle = document.getElementById('result-title');
             const rMsg = document.getElementById('result-msg');
             const rEmoji = document.getElementById('result-emoji');
             
             if (state.score >= 4) {
-                rEmoji.innerText = "🏆";
-                rTitle.innerText = "이수 완료!";
-                rMsg.innerText = "훌륭한 지식 수준입니다. 결과가 저장됩니다.";
-                if (db) saveResult();
-                else document.getElementById('save-status').innerText = "온라인 저장소가 연결되지 않아 결과가 기록되지 않았습니다.";
+                rEmoji.innerText = "👑";
+                rTitle.innerText = "이수 완료";
+                rMsg.innerText = "전문 지식을 완벽히 마스터하셨습니다.";
+                saveLocal();
             } else {
-                rEmoji.innerText = "📚";
+                rEmoji.innerText = "📖";
                 rTitle.innerText = "재학습 권고";
-                rMsg.innerText = "4점 이상인 경우에만 이수 데이터가 전송됩니다.";
+                rMsg.innerText = "4점 이상인 경우에만 정식 이수 기록이 남습니다.";
             }
         };
 
-        const saveResult = async () => {
-            try {
-                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'submissions'), {
-                    ...state.userInfo,
-                    score: state.score,
-                    timestamp: serverTimestamp()
-                });
-                document.getElementById('save-status').innerText = "기록이 성공적으로 전송되었습니다.";
-            } catch (e) { console.error(e); }
+        // 데이터 저장 (로컬 저장소 활용)
+        const saveLocal = () => {
+            const data = JSON.parse(localStorage.getItem('diabetes_results') || '[]');
+            data.push({ ...state.userInfo, score: state.score, date: new Date().toLocaleString() });
+            localStorage.setItem('diabetes_results', JSON.stringify(data));
+            document.getElementById('save-status').innerText = "이 기기에 기록이 저장되었습니다.";
         };
 
-        window.refreshData = async () => {
-            if (!db) return alert("Firebase가 설정되지 않았습니다.");
-            const tb = document.getElementById('admin-tbody');
-            tb.innerHTML = '';
-            const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'submissions'));
-            snap.forEach(d => {
-                const item = d.data();
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="px-8 py-4 text-xs text-gray-400">${item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString() : '-'}</td>
-                    <td class="px-8 py-4 font-bold text-gray-700">${item.dept} / ${item.team}</td>
-                    <td class="px-8 py-4 text-gray-600">${item.name} (${item.empId})</td>
-                    <td class="px-8 py-4 text-center font-black text-blue-600">${item.score}</td>
+        // 관리자 기능
+        window.showAdmin = () => {
+            const data = JSON.parse(localStorage.getItem('diabetes_results') || '[]');
+            const tbody = document.getElementById('admin-tbody');
+            tbody.innerHTML = '';
+            data.reverse().forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 border-b">${item.name}</td>
+                    <td class="p-3 border-b text-xs text-gray-500">${item.dept}/${item.team}</td>
+                    <td class="p-3 border-b text-xs font-mono">${item.empId}</td>
+                    <td class="p-3 border-b text-center font-bold text-blue-600">${item.score}</td>
                 `;
-                tb.appendChild(row);
+                tbody.appendChild(tr);
             });
+            document.getElementById('admin-modal').style.display = 'flex';
         };
 
-        window.exportToExcel = () => {
-            const rows = Array.from(document.querySelectorAll('#admin-tbody tr'));
-            const csvContent = "data:text/csv;charset=utf-8,\ufeff" + 
-                "일시,사업부/팀,성명(사번),점수\n" + 
-                rows.map(r => Array.from(r.querySelectorAll('td')).map(td => td.innerText.replace(/\n/g, ' ')).join(",")).join("\n");
+        window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
+
+        window.exportCSV = () => {
+            const data = JSON.parse(localStorage.getItem('diabetes_results') || '[]');
+            if(data.length === 0) return alert("저장된 데이터가 없습니다.");
+            let csv = "\ufeff성명,소속,사번,점수,응시시간\n";
+            data.forEach(item => {
+                csv += `${item.name},${item.dept} ${item.team},${item.empId},${item.score},${item.date}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const link = document.createElement("a");
-            link.setAttribute("href", encodeURI(csvContent));
-            link.setAttribute("download", "diabetes_results.csv");
+            link.href = URL.createObjectURL(blob);
+            link.download = "당뇨교육_결과명단.csv";
             link.click();
         };
-
-        initFirebase();
     </script>
 </body>
 </html>
