@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diabetes Training System</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700&display=swap');
+        body { font-family: 'Pretendard', sans-serif; background-color: #f1f5f9; }
+        .active-step { display: block !important; }
+        .option-card { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); }
+        .option-card:hover { transform: scale(1.02); border-color: #2563eb; background-color: #eff6ff; }
+        .glass-morphism { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div id="app" class="max-w-4xl mx-auto px-4 py-8">
+        
+        <!-- Navigation for Admin -->
+        <div id="admin-nav" class="hidden flex justify-center mb-8">
+            <div class="bg-white p-1 rounded-2xl shadow-sm border border-gray-200 flex space-x-1">
+                <button onclick="switchView('user')" id="nav-user" class="px-6 py-2 rounded-xl font-bold text-sm bg-blue-600 text-white transition-all">시뮬레이션</button>
+                <button onclick="switchView('admin')" id="nav-admin" class="px-6 py-2 rounded-xl font-bold text-sm text-gray-500 hover:bg-gray-50 transition-all">결과 대시보드</button>
+            </div>
+        </div>
+
+        <!-- [USER] Registration -->
+        <div id="step-register" class="step-content block bg-white rounded-3xl p-10 shadow-xl border border-gray-100 max-w-xl mx-auto">
+            <div class="text-center mb-10">
+                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-3xl flex items-center justify-center text-4xl mx-auto mb-6 shadow-inner">🩺</div>
+                <h1 class="text-2xl font-black text-gray-800 tracking-tight">당뇨약 처방 트레이닝</h1>
+                <p class="text-gray-500 mt-2 font-medium text-sm italic">Case Simulation for Sales Reps</p>
+            </div>
+            <form id="reg-form" class="space-y-5">
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-400 uppercase ml-1">사업부</label>
+                        <input type="text" id="user-dept" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none" placeholder="사업부 입력">
+                    </div>
+                    <div class="space-y-1">
+                        <label class="text-xs font-bold text-gray-400 uppercase ml-1">팀</label>
+                        <input type="text" id="user-team" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none" placeholder="팀명 입력">
+                    </div>
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-1">사번</label>
+                    <input type="text" id="user-id" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none" placeholder="사번(ID) 입력">
+                </div>
+                <div class="space-y-1">
+                    <label class="text-xs font-bold text-gray-400 uppercase ml-1">담당자명</label>
+                    <input type="text" id="user-name" required class="w-full px-4 py-3 border border-gray-200 rounded-2xl focus:ring-4 focus:ring-blue-100 focus:border-blue-500 transition-all outline-none" placeholder="성함 입력">
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black text-lg hover:bg-blue-700 hover:shadow-lg transform active:scale-95 transition-all mt-6 shadow-blue-200 shadow-xl">테스트 시작</button>
+            </form>
+        </div>
+
+        <!-- [USER] Game Body -->
+        <div id="step-game" class="step-content hidden max-w-2xl mx-auto animate-in fade-in duration-500">
+            <div class="flex justify-between items-end mb-8">
+                <div class="space-y-1">
+                    <div class="text-gray-400 text-xs font-bold uppercase tracking-widest">Ongoing Case</div>
+                    <div class="text-3xl font-black text-gray-800">환자 #<span id="current-num">1</span></div>
+                </div>
+                <div class="text-right">
+                    <div class="text-gray-400 text-xs font-bold uppercase tracking-widest">Score</div>
+                    <div class="text-2xl font-black text-blue-600"><span id="current-score">0</span> pts</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl p-8 shadow-xl border border-gray-100 mb-8 overflow-hidden relative">
+                <div class="absolute top-0 right-0 p-4 bg-blue-50 text-blue-600 text-[10px] font-black tracking-tighter uppercase rounded-bl-xl">Clinical Profile</div>
+                <h2 class="text-xl font-bold mb-6 text-gray-800 pr-20" id="case-description"></h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">HbA1c</div>
+                        <div id="val-hba1c" class="text-lg font-black text-red-500"></div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">eGFR</div>
+                        <div id="val-egfr" class="text-lg font-black text-blue-600"></div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">BMI</div>
+                        <div id="val-bmi" class="text-lg font-black text-gray-700"></div>
+                    </div>
+                    <div class="bg-gray-50 p-3 rounded-2xl border border-gray-100">
+                        <div class="text-[10px] font-bold text-gray-400 uppercase mb-1">Age</div>
+                        <div id="val-age" class="text-lg font-black text-gray-700"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 gap-4" id="options-container"></div>
+        </div>
+
+        <!-- [USER] Result -->
+        <div id="step-result" class="step-content hidden text-center bg-white rounded-3xl p-12 shadow-2xl max-w-xl mx-auto border border-gray-100">
+            <div id="result-emoji" class="text-8xl mb-6"></div>
+            <h2 class="text-3xl font-black mb-2 text-gray-800" id="result-title"></h2>
+            <p class="text-gray-500 mb-10 font-medium" id="result-msg"></p>
+            
+            <div class="bg-blue-50 p-8 rounded-3xl mb-10 relative">
+                <div class="text-xs text-blue-600 font-bold uppercase tracking-widest mb-2">Final Certification Score</div>
+                <div class="text-6xl font-black text-blue-900"><span id="final-score">0</span> <span class="text-2xl font-medium text-blue-300">/ 5</span></div>
+            </div>
+            
+            <p id="save-status" class="text-xs text-gray-400 mb-6 italic bg-gray-50 py-2 rounded-full"></p>
+            <button onclick="location.reload()" class="inline-flex items-center text-blue-600 font-bold hover:text-blue-800 transition-colors">
+                <span class="mr-2">↺</span> 처음부터 다시하기
+            </button>
+        </div>
+
+        <!-- [ADMIN] Dashboard -->
+        <div id="step-admin" class="step-content hidden animate-in slide-in-from-bottom-5 duration-500">
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
+                <div>
+                    <h2 class="text-3xl font-black text-gray-800 tracking-tight">Performance Data</h2>
+                    <p class="text-gray-500 font-medium">4점 이상 득점자 실시간 현황 (교육 이수 명단)</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="refreshData()" class="px-5 py-3 bg-white border border-gray-200 rounded-2xl text-sm font-bold shadow-sm hover:bg-gray-50 transition-all flex items-center">
+                        <span class="mr-2">🔄</span> 데이터 새로고침
+                    </button>
+                    <button onclick="exportToExcel()" class="px-5 py-3 bg-green-600 text-white rounded-2xl text-sm font-bold shadow-lg shadow-green-100 hover:bg-green-700 transition-all flex items-center">
+                        <span class="mr-2">📊</span> 엑셀(CSV) 다운로드
+                    </button>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="text-xs font-bold text-gray-400 uppercase mb-2">총 이수 인원</div>
+                    <div id="stat-total" class="text-4xl font-black text-blue-600">0</div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="text-xs font-bold text-gray-400 uppercase mb-2">평균 성취도</div>
+                    <div id="stat-avg" class="text-4xl font-black text-blue-600">0.0</div>
+                </div>
+                <div class="bg-white p-6 rounded-3xl shadow-sm border border-gray-100">
+                    <div class="text-xs font-bold text-gray-400 uppercase mb-2">최근 업데이트</div>
+                    <div id="stat-time" class="text-lg font-bold text-gray-800 mt-2">-</div>
+                </div>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-xl border border-gray-100 overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead>
+                            <tr class="bg-gray-50 text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-gray-100">
+                                <th class="px-8 py-5">응시 일시</th>
+                                <th class="px-8 py-5">사업부 / 팀</th>
+                                <th class="px-8 py-5">이름 (사번)</th>
+                                <th class="px-8 py-5 text-center">점수</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-tbody" class="divide-y divide-gray-50">
+                            <tr>
+                                <td colspan="4" class="px-8 py-20 text-center text-gray-400 font-medium">데이터를 불러오는 중...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Admin Toggle -->
+    <div class="fixed bottom-6 right-6 opacity-0 hover:opacity-100 transition-opacity">
+        <button onclick="toggleAdmin()" class="w-12 h-12 bg-white border border-gray-200 rounded-full shadow-lg flex items-center justify-center text-xl grayscale hover:grayscale-0">⚙️</button>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm hidden flex items-center justify-center p-6 z-[100]">
+        <div class="bg-white rounded-[40px] p-10 max-w-sm w-full shadow-2xl text-center animate-in zoom-in-95 duration-200">
+            <div id="modal-icon" class="text-6xl mb-6"></div>
+            <h3 id="modal-title" class="text-2xl font-black mb-3 text-gray-800"></h3>
+            <p id="modal-body" class="text-gray-500 mb-10 font-medium leading-relaxed"></p>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-black shadow-xl shadow-blue-100 hover:bg-blue-700 transition-all">확인</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sales-diabetes-edu';
+
+        // --- Data ---
+        const cases = [
+            {
+                age: 48, hba1c: 8.4, egfr: 92, bmi: 29,
+                desc: "새로 당뇨를 진단받은 환자입니다. 체중 조절이 권고되며 초기 요법을 시작하려 합니다. 1차 표준 치료제는?",
+                options: [
+                    { name: 'Metformin', score: 1, feedback: "정확합니다! 가이드라인 1차 표준 치료제입니다." },
+                    { name: 'DPP-4 억제제', score: 0, feedback: "차선책으로 가능하나 1차로는 메트포르민이 우선입니다." },
+                    { name: 'SGLT2 억제제', score: 0, feedback: "좋은 약제지만 1차 단독요법 기준은 아닙니다." }
+                ]
+            },
+            {
+                age: 65, hba1c: 7.9, egfr: 22, bmi: 24,
+                desc: "신기능이 현저히 저하된 만성 신질환 4단계 환자입니다. 이 환자에게 유산산증 위험으로 금기인 약제는?",
+                options: [
+                    { name: 'Linagliptin', score: 0, feedback: "리나글립틴은 신기능과 관계없이 안전합니다." },
+                    { name: 'Metformin', score: 1, feedback: "정답! eGFR 30 미만인 경우 메트포르민은 절대 금기입니다." },
+                    { name: 'SGLT2 억제제', score: 0, feedback: "금기는 아니나 이 상황에서 당 배출 효과가 거의 없습니다." }
+                ]
+            },
+            {
+                age: 58, hba1c: 8.1, egfr: 85, bmi: 31,
+                desc: "심부전(Heart Failure)을 앓고 있는 환자입니다. 혈당 조절 외에 심부전으로 인한 입원 위험을 낮추는 약제는?",
+                options: [
+                    { name: 'SGLT2 억제제', score: 1, feedback: "정답! SGLT2i는 심부전 개선 효과가 입증된 최적의 약제입니다." },
+                    { name: '설포닐우레아(SU)', score: 0, feedback: "심혈관 혜택이 없으며 체중 증가가 심부전에 악영향을 줄 수 있습니다." },
+                    { name: '피오글리타존', score: 0, feedback: "주의! 부종을 유발하여 심부전을 악화시킬 수 있습니다." }
+                ]
+            },
+            {
+                age: 79, hba1c: 7.4, egfr: 52, bmi: 21,
+                desc: "홀로 거주하는 고령 환자로, 저혈당이 발생할 경우 대응이 불가능합니다. 가장 안전한 옵션은?",
+                options: [
+                    { name: 'DPP-4 억제제', score: 1, feedback: "정답! 식사와 무관하게 저혈당 위험이 거의 없어 고령자에게 추천됩니다." },
+                    { name: '글리메피리드', score: 0, feedback: "위험! 고령 환자에게 심각하고 지속적인 저혈당을 유발할 수 있습니다." },
+                    { name: '메트포르민 단독', score: 0, feedback: "안전하지만 고령자의 위장관 부작용과 식욕부진을 유발할 수 있습니다." }
+                ]
+            },
+            {
+                age: 52, hba1c: 10.1, egfr: 88, bmi: 34,
+                desc: "당화혈색소가 매우 높고 고도비만이 동반된 환자입니다. 가장 강력한 강하와 체중 조절이 필요합니다.",
+                options: [
+                    { name: 'GLP-1 유사체', score: 1, feedback: "정답! 가장 강력한 당 강하와 우수한 체중 감소 효과를 가집니다." },
+                    { name: 'DPP-4 억제제', score: 0, feedback: "이 정도의 고혈당을 조절하기엔 강하 효과가 제한적입니다." },
+                    { name: 'SGLT2 억제제', score: 0, feedback: "좋은 선택이나 GLP-1 유사체의 강력한 효과에는 미치지 못합니다." }
+                ]
+            }
+        ];
+
+        let state = { currentIdx: 0, score: 0, user: null, userInfo: {}, adminView: false, fetchedData: [] };
+
+        // --- Core ---
+        const init = async () => {
+            if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                await signInWithCustomToken(auth, __initial_auth_token);
+            } else {
+                await signInAnonymously(auth);
+            }
+            onAuthStateChanged(auth, (u) => { state.user = u; });
+        };
+
+        window.switchView = (v) => {
+            document.querySelectorAll('.step-content').forEach(s => s.classList.add('hidden'));
+            document.getElementById('nav-user').className = v === 'user' ? "px-6 py-2 rounded-xl font-bold text-sm bg-blue-600 text-white transition-all" : "px-6 py-2 rounded-xl font-bold text-sm text-gray-500 hover:bg-gray-50 transition-all";
+            document.getElementById('nav-admin').className = v === 'admin' ? "px-6 py-2 rounded-xl font-bold text-sm bg-blue-600 text-white transition-all" : "px-6 py-2 rounded-xl font-bold text-sm text-gray-500 hover:bg-gray-50 transition-all";
+            
+            if (v === 'admin') {
+                document.getElementById('step-admin').classList.remove('hidden');
+                refreshData();
+            } else {
+                document.getElementById('step-register').classList.remove('hidden');
+            }
+        };
+
+        window.toggleAdmin = () => {
+            document.getElementById('admin-nav').classList.toggle('hidden');
+            switchView('admin');
+        };
+
+        // --- Game ---
+        document.getElementById('reg-form').onsubmit = (e) => {
+            e.preventDefault();
+            state.userInfo = {
+                dept: document.getElementById('user-dept').value,
+                team: document.getElementById('user-team').value,
+                empId: document.getElementById('user-id').value,
+                name: document.getElementById('user-name').value
+            };
+            document.getElementById('step-register').classList.add('hidden');
+            document.getElementById('step-game').classList.remove('hidden');
+            renderCase();
+        };
+
+        const renderCase = () => {
+            const c = cases[state.currentIdx];
+            document.getElementById('current-num').innerText = state.currentIdx + 1;
+            document.getElementById('current-score').innerText = state.score;
+            document.getElementById('case-description').innerText = c.desc;
+            document.getElementById('val-hba1c').innerText = c.hba1c + "%";
+            document.getElementById('val-egfr').innerText = c.egfr;
+            document.getElementById('val-bmi').innerText = c.bmi;
+            document.getElementById('val-age').innerText = c.age;
+
+            const container = document.getElementById('options-container');
+            container.innerHTML = '';
+            c.options.forEach(opt => {
+                const b = document.createElement('div');
+                b.className = "option-card bg-white p-5 border-2 border-gray-100 rounded-3xl font-bold text-gray-700 shadow-sm";
+                b.innerText = opt.name;
+                b.onclick = () => {
+                    state.score += opt.score;
+                    showFeedback(opt.score > 0, opt.feedback);
+                };
+                container.appendChild(b);
+            });
+        };
+
+        const showFeedback = (isOk, msg) => {
+            const modal = document.getElementById('modal');
+            document.getElementById('modal-icon').innerText = isOk ? "🎯" : "⚠️";
+            document.getElementById('modal-title').innerText = isOk ? "정답입니다!" : "오답입니다.";
+            document.getElementById('modal-body').innerText = msg;
+            modal.classList.remove('hidden');
+
+            document.getElementById('modal-btn').onclick = () => {
+                modal.classList.add('hidden');
+                state.currentIdx++;
+                if (state.currentIdx < cases.length) renderCase();
+                else finish();
+            };
+        };
+
+        const finish = async () => {
+            document.getElementById('step-game').classList.add('hidden');
+            document.getElementById('step-result').classList.remove('hidden');
+            document.getElementById('final-score').innerText = state.score;
+            
+            const rTitle = document.getElementById('result-title');
+            const rMsg = document.getElementById('result-msg');
+            const rEmoji = document.getElementById('result-emoji');
+            
+            if (state.score >= 4) {
+                rEmoji.innerText = "⭐";
+                rTitle.innerText = "교육 이수 완료";
+                rMsg.innerText = "전문가 수준의 지식을 갖추셨습니다. 이수 데이터가 전송되었습니다.";
+                await save();
+            } else {
+                rEmoji.innerText = "📖";
+                rTitle.innerText = "재도전 권고";
+                rMsg.innerText = "4점 미만은 이수 처리가 되지 않습니다. 다시 학습 후 도전해 주세요.";
+                document.getElementById('save-status').innerText = "기록 기준(4점) 미달로 저장되지 않았습니다.";
+            }
+        };
+
+        const save = async () => {
+            if (!state.user) return;
+            document.getElementById('save-status').innerText = "이수 기록을 전송하는 중...";
+            try {
+                await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'submissions'), {
+                    ...state.userInfo,
+                    score: state.score,
+                    timestamp: serverTimestamp(),
+                    userId: state.user.uid
+                });
+                document.getElementById('save-status').innerText = "성공적으로 저장되었습니다.";
+            } catch (e) {
+                document.getElementById('save-status').innerText = "저장 중 오류 발생. 다시 시도해 주세요.";
+            }
+        };
+
+        // --- Admin & Excel ---
+        window.refreshData = async () => {
+            if (!state.user) return;
+            const tb = document.getElementById('admin-tbody');
+            tb.innerHTML = '<tr><td colspan="4" class="px-8 py-20 text-center text-gray-400">서버에서 정보를 가져오고 있습니다...</td></tr>';
+            
+            try {
+                const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', 'submissions'));
+                let data = [];
+                snap.forEach(d => data.push(d.data()));
+                
+                // Sort by recent
+                data.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
+                state.fetchedData = data;
+
+                if (data.length === 0) {
+                    tb.innerHTML = '<tr><td colspan="4" class="px-8 py-20 text-center text-gray-400 font-medium">아직 등록된 이수 데이터가 없습니다.</td></tr>';
+                    return;
+                }
+
+                tb.innerHTML = '';
+                let totalS = 0;
+                data.forEach(item => {
+                    const time = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR') : '-';
+                    totalS += item.score;
+                    const row = document.createElement('tr');
+                    row.className = "hover:bg-blue-50/30 transition-colors";
+                    row.innerHTML = `
+                        <td class="px-8 py-5 text-xs text-gray-400 font-medium">${time}</td>
+                        <td class="px-8 py-5">
+                            <div class="text-sm font-bold text-gray-800">${item.dept}</div>
+                            <div class="text-[10px] text-gray-500 uppercase tracking-tighter">${item.team}</div>
+                        </td>
+                        <td class="px-8 py-5">
+                            <div class="text-sm font-bold text-gray-700">${item.name}</div>
+                            <div class="text-[10px] text-gray-400 font-mono">${item.empId}</div>
+                        </td>
+                        <td class="px-8 py-5 text-center">
+                            <span class="px-3 py-1 bg-blue-50 text-blue-700 rounded-lg font-black text-sm">${item.score}</span>
+                        </td>
+                    `;
+                    tb.appendChild(row);
+                });
+
+                document.getElementById('stat-total').innerText = data.length;
+                document.getElementById('stat-avg').innerText = (totalS / data.length).toFixed(1);
+                document.getElementById('stat-time').innerText = new Date().toLocaleTimeString();
+
+            } catch (e) {
+                tb.innerHTML = `<tr><td colspan="4" class="px-8 py-20 text-center text-red-400">오류 발생: ${e.message}</td></tr>`;
+            }
+        };
+
+        window.exportToExcel = () => {
+            if (state.fetchedData.length === 0) return;
+            
+            const headers = ["응시일시", "사업부", "팀", "사번", "성명", "점수"];
+            const csvRows = [
+                headers.join(","),
+                ...state.fetchedData.map(d => [
+                    d.timestamp ? `"${new Date(d.timestamp.seconds * 1000).toLocaleString('ko-KR')}"` : '"-"',
+                    `"${d.dept}"`,
+                    `"${d.team}"`,
+                    `"${d.empId}"`,
+                    `"${d.name}"`,
+                    d.score
+                ].join(","))
+            ].join("\n");
+
+            // BOM for Korean text in Excel
+            const blob = new Blob(["\ufeff" + csvRows], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', `당뇨교육_이수명단_${new Date().toISOString().split('T')[0]}.csv`);
+            a.click();
+        };
+
+        init();
+    </script>
+</body>
+</html>
