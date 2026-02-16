@@ -3,64 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D-CAMP: Diabetes Master Simulation</title>
+    <title>D-CAMP: Diabetes Master Sim</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&display=swap');
-        body { font-family: 'Pretendard', sans-serif; background-color: #f1f5f9; color: #1e293b; overflow-x: hidden; }
+        body { font-family: 'Pretendard', sans-serif; background-color: #f8fafc; color: #1e293b; overflow-x: hidden; }
         .step-content { display: none; }
         .step-content.active { display: block; animation: fadeIn 0.4s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .option-card { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #f1f5f9; }
         .option-card:hover { transform: translateY(-4px); border-color: #2563eb; background-color: #eff6ff; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2); }
-        .chart-bar { transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .patient-img-wrapper { position: relative; border-radius: 2.5rem; overflow: hidden; background-color: #1e293b; aspect-ratio: 4/5; }
-        .patient-img-wrapper::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 60%); }
-        .loader { width: 48px; height: 48px; border: 5px solid #FFF; border-bottom-color: #2563eb; border-radius: 50%; display: inline-block; box-sizing: border-box; animation: rotation 1s linear infinite; }
-        @keyframes rotation { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .data-card { background: white; border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #edf2f7; }
+        #radar-polygon { transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
     </style>
 </head>
 <body class="min-h-screen">
-    <div id="app" class="max-w-3xl mx-auto px-4 py-8 md:py-16">
+    <div id="app" class="max-w-4xl mx-auto px-4 py-8 md:py-16">
         
         <!-- [1] 등록 화면 -->
-        <div id="step-register" class="step-content active bg-white rounded-[3rem] p-10 md:p-14 shadow-2xl border border-gray-100 text-center">
+        <div id="step-register" class="step-content active bg-white rounded-[3rem] p-10 md:p-16 shadow-2xl border border-gray-100 text-center max-w-2xl mx-auto">
             <div class="mb-12">
                 <div class="inline-block px-10 py-5 bg-gray-900 text-white rounded-3xl mb-8 shadow-xl">
-                    <span class="text-4xl font-black italic tracking-tighter">D-CAMP</span>
+                    <span class="text-5xl font-[900] italic tracking-tighter uppercase">D-CAMP</span>
                 </div>
-                <h1 class="text-3xl font-black text-gray-800 tracking-tight leading-tight">당뇨약 처방 시뮬레이션<br><span class="text-blue-600 text-xl font-bold uppercase tracking-widest">AI Patient Generation System</span></h1>
+                <h1 class="text-3xl font-black text-gray-800 tracking-tight leading-tight">당뇨 약제 처방 시뮬레이션</h1>
+                <p class="text-gray-400 mt-3 font-semibold uppercase tracking-widest text-xs">Medical Sales Performance Data System</p>
             </div>
             
             <form id="reg-form" class="space-y-4 max-w-sm mx-auto text-left">
                 <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1">Department</label>
-                        <input type="text" id="user-dept" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm" placeholder="사업부">
-                    </div>
-                    <div>
-                        <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1">Team</label>
-                        <input type="text" id="user-team" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm" placeholder="팀명">
-                    </div>
+                    <input type="text" id="user-dept" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm font-bold bg-gray-50" placeholder="사업부">
+                    <input type="text" id="user-team" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm font-bold bg-gray-50" placeholder="팀명">
                 </div>
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1">Employee ID</label>
-                    <input type="text" id="user-id" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm" placeholder="사번 입력">
-                </div>
-                <div>
-                    <label class="text-[10px] font-bold text-gray-400 uppercase mb-1 ml-1">Name</label>
-                    <input type="text" id="user-name" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm" placeholder="성함 입력">
-                </div>
-                <button type="submit" id="start-btn" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-xl hover:bg-blue-700 shadow-2xl transition-all mt-6 active:scale-95 shadow-blue-100">TRAINING START</button>
+                <input type="text" id="user-id" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm font-bold bg-gray-50" placeholder="사번(ID)">
+                <input type="text" id="user-name" required class="w-full px-5 py-4 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-sm font-bold bg-gray-50" placeholder="성함">
+                <button type="submit" id="start-btn" class="w-full bg-blue-600 text-white py-5 rounded-3xl font-black text-xl hover:bg-blue-700 shadow-2xl transition-all mt-6 active:scale-95 uppercase">Training Start</button>
             </form>
         </div>
 
-        <!-- [2] 게임 화면 -->
+        <!-- [2] 게임 화면 (데이터 시각화) -->
         <div id="step-game" class="step-content">
-            <div class="flex justify-between items-center mb-8 px-2">
+            <div class="flex justify-between items-end mb-8 px-2">
                 <div class="flex flex-col">
-                    <span class="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-none mb-2 italic">AI-Generated Patient</span>
-                    <span class="text-4xl font-black text-gray-800 tracking-tighter">Case #<span id="current-num">1</span></span>
+                    <span class="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-none mb-2 italic">Clinical Case Analysis</span>
+                    <span class="text-4xl font-black text-gray-800 tracking-tighter">CASE #<span id="current-num">1</span></span>
                 </div>
                 <div class="text-right">
                     <span class="text-gray-400 text-[10px] font-bold uppercase tracking-widest block mb-1">SCORE</span>
@@ -68,105 +54,108 @@
                 </div>
             </div>
 
-            <!-- 환자 비주얼 보드 -->
-            <div class="bg-white rounded-[3rem] shadow-2xl border border-gray-100 mb-8 overflow-hidden flex flex-col md:flex-row min-h-[480px]">
-                <!-- AI 이미지 영역 -->
-                <div class="md:w-5/12 patient-img-wrapper relative flex items-center justify-center overflow-hidden">
-                    <div id="img-loader" class="absolute inset-0 z-20 bg-gray-900/80 flex flex-col items-center justify-center p-6 text-center">
-                        <span class="loader mb-4"></span>
-                        <p class="text-white text-xs font-bold animate-pulse">나노바나나 AI가<br>한국인 환자 이미지를 생성 중입니다...</p>
-                    </div>
-                    <img id="p-image" src="" alt="Korean Patient" class="w-full h-full object-cover">
-                    <div class="absolute bottom-8 left-8 z-10 text-white">
-                        <div id="p-meta" class="text-[10px] font-bold opacity-70 mb-1 tracking-widest uppercase"></div>
-                        <div id="p-title" class="text-3xl font-black leading-tight">환자 프로필</div>
-                    </div>
+            <!-- 다각형 그래프 대시보드 -->
+            <div class="data-card p-8 md:p-12 mb-8 flex flex-col md:flex-row items-center gap-12">
+                <!-- Radar Chart Area -->
+                <div class="w-full md:w-1/2 flex justify-center relative">
+                    <svg width="260" height="260" viewBox="0 0 200 200" class="overflow-visible">
+                        <!-- BG Layers -->
+                        <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" stroke-width="1" />
+                        <circle cx="100" cy="100" r="60" fill="none" stroke="#f1f5f9" stroke-width="1" />
+                        <circle cx="100" cy="100" r="40" fill="none" stroke="#f8fafc" stroke-width="1" />
+                        <!-- Axis -->
+                        <line x1="100" y1="20" x2="100" y2="180" stroke="#e2e8f0" stroke-width="1" />
+                        <line x1="20" y1="100" x2="180" y2="100" stroke="#e2e8f0" stroke-width="1" />
+                        <!-- Labels -->
+                        <text x="100" y="8" text-anchor="middle" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">HbA1c</text>
+                        <text x="195" y="103" text-anchor="start" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">eGFR</text>
+                        <text x="100" y="198" text-anchor="middle" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">BMI</text>
+                        <text x="5" y="103" text-anchor="end" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">Age</text>
+                        <!-- Polygon -->
+                        <polygon id="radar-polygon" points="" fill="rgba(37, 99, 235, 0.25)" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
+                    </svg>
                 </div>
-                <!-- 데이터 영역 -->
-                <div class="md:w-7/12 p-8 md:p-12 flex flex-col justify-center bg-white">
-                    <div class="space-y-8">
-                        <div>
-                            <div class="flex justify-between items-end mb-3">
-                                <span class="text-xs font-black text-gray-400 uppercase tracking-widest">HbA1c (당화혈색소)</span>
-                                <span class="text-3xl font-black text-red-500"><span id="val-hba1c"></span>%</span>
-                            </div>
-                            <div class="w-full bg-gray-100 h-4 rounded-full overflow-hidden shadow-inner">
-                                <div id="bar-hba1c" class="chart-bar h-full bg-gradient-to-r from-red-400 to-red-600" style="width: 0%"></div>
-                            </div>
+
+                <!-- Numerical Data Area -->
+                <div class="w-full md:w-1/2 space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">HbA1c (%)</div>
+                            <div id="val-hba1c" class="text-2xl font-black text-red-500"></div>
                         </div>
-                        <div>
-                            <div class="flex justify-between items-end mb-3">
-                                <span class="text-xs font-black text-gray-400 uppercase tracking-widest">eGFR (신여과율)</span>
-                                <span class="text-3xl font-black text-blue-600"><span id="val-egfr"></span> <small class="text-xs font-bold">mL/min</small></span>
-                            </div>
-                            <div class="w-full bg-gray-100 h-4 rounded-full overflow-hidden shadow-inner">
-                                <div id="bar-egfr" class="chart-bar h-full bg-gradient-to-r from-blue-400 to-blue-700" style="width: 0%"></div>
-                            </div>
+                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">eGFR (mL)</div>
+                            <div id="val-egfr" class="text-2xl font-black text-blue-600"></div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100 text-center shadow-sm">
-                                <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">BMI</div>
-                                <div id="val-bmi" class="text-xl font-black text-gray-800 tracking-tighter"></div>
-                            </div>
-                            <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100 text-center shadow-sm">
-                                <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">Age</div>
-                                <div id="val-age" class="text-xl font-black text-gray-800 tracking-tighter"></div>
-                            </div>
+                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">BMI (kg/m²)</div>
+                            <div id="val-bmi" class="text-2xl font-black text-gray-800"></div>
+                        </div>
+                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
+                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">나이 (Age)</div>
+                            <div id="val-age" class="text-2xl font-black text-gray-800"></div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-600/5 p-5 rounded-[1.5rem] border border-blue-600/10 text-left">
+                        <div class="flex items-center space-x-2 text-blue-800">
+                            <span class="text-xs font-black uppercase tracking-widest">Case Profile:</span>
+                            <span id="p-meta" class="text-xs font-bold"></span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="mb-12">
-                <div class="p-8 bg-blue-50 rounded-[2.5rem] border border-blue-100 mb-8 shadow-sm relative">
-                    <h3 class="text-[11px] font-black text-blue-800 mb-4 uppercase tracking-[0.2em] flex items-center">
-                        <span class="w-2 h-2 bg-blue-600 rounded-full mr-3 animate-pulse"></span> Clinical Note
+                <div class="p-8 bg-white rounded-[2.5rem] border-2 border-blue-50 shadow-sm mb-8 relative overflow-hidden text-left">
+                    <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
+                    <h3 class="text-[11px] font-black text-blue-800 mb-4 uppercase tracking-[0.2em] flex items-center leading-none">
+                        <span class="w-2 h-2 bg-blue-600 rounded-full mr-3 animate-ping"></span> Physician Clinical Note
                     </h3>
-                    <p class="text-[16px] text-gray-700 leading-relaxed font-bold italic" id="case-description"></p>
+                    <p class="text-[18px] text-gray-700 leading-relaxed font-bold italic" id="case-description"></p>
                 </div>
-                <div id="options-container" class="space-y-4 mb-10"></div>
+                <div id="options-container" class="space-y-4 mb-20"></div>
             </div>
         </div>
 
         <!-- [3] 결과 화면 -->
-        <div id="step-result" class="step-content text-center bg-white rounded-[4.4rem] p-16 shadow-2xl border border-gray-50">
-            <div id="result-emoji" class="text-9xl mb-8">🎖️</div>
-            <h2 class="text-4xl font-black mb-4 text-gray-800">트레이닝 종료</h2>
-            <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed">수고하셨습니다. 모든 응시 결과는<br><span class="text-blue-600 font-bold tracking-tight">D-CAMP CENTRAL SERVER</span>로 전송되었습니다.</p>
+        <div id="step-result" class="step-content hidden text-center bg-white rounded-[4rem] p-16 shadow-2xl border border-gray-50 max-w-2xl mx-auto">
+            <div id="result-emoji" class="text-9xl mb-8">🏅</div>
+            <h2 class="text-4xl font-black mb-4 text-gray-800 tracking-tighter">트레이닝 완료</h2>
+            <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic">모든 응시 결과는 <span class="text-blue-600 font-black tracking-tight">D-CAMP 중앙 서버</span>로<br>성공적으로 전송되었습니다.</p>
             
-            <div class="bg-gray-900 p-12 rounded-[3.5rem] mb-12 shadow-2xl">
-                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.4em] mb-4">Total Certification Score</div>
-                <div class="text-8xl font-black text-white leading-none"><span id="final-score">0</span> <span class="text-3xl text-gray-600 font-medium">/ 5</span></div>
+            <div class="bg-gray-900 p-14 rounded-[3.5rem] mb-12 shadow-2xl border-b-8 border-blue-600 text-left relative overflow-hidden">
+                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest">TOTAL CERTIFICATION SCORE</div>
+                <div class="text-9xl font-black text-white leading-none tracking-tighter"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium">/ 5</span></div>
             </div>
             
-            <p id="save-status" class="text-sm text-blue-600 mb-10 font-black tracking-widest uppercase animate-pulse italic"></p>
-            <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase tracking-widest">↺ Retake Test</button>
+            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic"></p>
+            <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase">↺ RETAKE TRAINING</button>
             
-            <div class="mt-16 pt-8 border-t border-gray-100">
-                <button onclick="showAdmin()" class="text-[11px] text-gray-300 hover:text-gray-800 font-black uppercase tracking-[0.4em] transition-all">Admin Management Console</button>
+            <div class="mt-20 pt-10 border-t border-gray-100">
+                <button onclick="showAdmin()" class="text-[11px] text-gray-300 hover:text-gray-800 font-black uppercase tracking-[0.5em] transition-all">Admin Dashboard</button>
             </div>
         </div>
 
         <!-- [4] 관리자 모달 -->
         <div id="admin-modal" class="fixed inset-0 bg-black/85 backdrop-blur-3xl hidden items-center justify-center p-6 z-[200]">
-            <div class="bg-white w-full max-w-2xl rounded-[3.5rem] p-12 max-h-[85vh] overflow-hidden flex flex-col shadow-2xl border border-gray-100">
+            <div class="bg-white w-full max-w-4xl rounded-[3.5rem] p-12 max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
                 <div class="flex justify-between items-center mb-10 text-left">
                     <div>
-                        <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3">D-CAMP 리포트</h3>
-                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none">Real-time Employee Status</p>
+                        <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3 italic">D-CAMP REPORT</h3>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black">Real-time Employee Result Clustering</p>
                     </div>
                     <button onclick="closeAdmin()" class="text-gray-300 hover:text-gray-800 text-6xl transition-colors">&times;</button>
                 </div>
                 <div class="flex space-x-4 mb-10">
-                    <button onclick="refreshData()" class="flex-1 bg-gray-100 text-gray-800 py-6 rounded-3xl text-xs font-black hover:bg-gray-200 transition-all uppercase tracking-widest">🔄 Sync Database</button>
-                    <button onclick="exportCSV()" class="flex-1 bg-green-600 text-white py-6 rounded-3xl text-xs font-black shadow-lg hover:bg-green-700 transition-all uppercase tracking-widest">📊 Export Excel</button>
+                    <button onclick="refreshData()" class="flex-1 bg-gray-100 text-gray-900 py-6 rounded-[2rem] text-xs font-black hover:bg-gray-200 transition-all tracking-[0.2em] uppercase">🔄 Sync Data</button>
+                    <button onclick="exportCSV()" class="flex-1 bg-green-600 text-white py-6 rounded-[2rem] text-xs font-black shadow-lg hover:bg-green-700 transition-all tracking-[0.2em] uppercase">📊 엑셀 다운로드</button>
                 </div>
-                <div class="overflow-y-auto flex-1 pr-4">
+                <div class="overflow-y-auto flex-1 pr-4 custom-scrollbar">
                     <table class="w-full text-left border-collapse">
                         <thead class="sticky top-0 bg-white text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-4">
-                            <tr><th class="pb-6">DATE</th><th class="pb-6">NAME (ID)</th><th class="pb-6">DEPT/TEAM</th><th class="pb-6 text-center">SCORE</th></tr>
+                            <tr><th class="pb-6">Date</th><th class="pb-6">Name (ID)</th><th class="pb-6">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
                         </thead>
-                        <tbody id="admin-tbody" class="text-sm divide-y divide-gray-50"></tbody>
+                        <tbody id="admin-tbody" class="text-sm divide-y divide-gray-50 text-left"></tbody>
                     </table>
                 </div>
             </div>
@@ -174,21 +163,21 @@
     </div>
 
     <!-- Feedback Modal -->
-    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl hidden items-center justify-center p-6 z-[100]">
-        <div class="bg-white rounded-[3.5rem] p-14 max-w-sm w-full shadow-2xl text-center">
-            <div id="modal-icon" class="text-8xl mb-8"></div>
-            <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter"></h3>
-            <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic"></p>
-            <button id="modal-btn" class="w-full bg-blue-900 text-white py-6 rounded-[2rem] font-black text-xl shadow-2xl active:scale-95 transition-all">다음 케이스 분석</button>
+    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-lg hidden items-center justify-center p-6 z-[100]">
+        <div class="bg-white rounded-[4rem] p-14 max-w-sm w-full shadow-2xl text-center">
+            <div id="modal-icon" class="text-9xl mb-8"></div>
+            <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none"></h3>
+            <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic text-center"></p>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all">다음 케이스 분석</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getFirestore, collection, addDoc, getDocs, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // 파이어베이스 및 API 설정
+        // 사용자 Firebase 설정
         const firebaseConfig = {
             apiKey: "AIzaSyB475AzDr96EP6I7YsyZx3OjnYDMuMaq7k",
             authDomain: "diabetes-sales.firebaseapp.com",
@@ -198,110 +187,71 @@
             appId: "1:778615949732:web:8783bfcb0a95ec15cbd931"
         };
 
-        const apiKey = ""; // Gemini API Key (Canvas environment handles this)
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "d-camp-ai-training-v2";
-        const collectionName = "diabetes_training_v15_results";
-
-        // 지연 처리를 위한 유틸리티
-        const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-        // 나노바나나(Gemini 2.5 Flash Image Preview)를 이용한 환자 이미지 생성 함수
-        async function generatePatientImage(promptText) {
-            let delay = 1000;
-            for (let i = 0; i < 5; i++) {
-                try {
-                    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image-preview:generateContent?key=${apiKey}`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            contents: [{ parts: [{ text: promptText }] }],
-                            generationConfig: { responseModalities: ['IMAGE'] }
-                        })
-                    });
-                    const result = await response.json();
-                    const base64 = result.candidates?.[0]?.content?.parts?.find(p => p.inlineData)?.inlineData?.data;
-                    if (base64) return `data:image/png;base64,${base64}`;
-                } catch (e) {
-                    await sleep(delay);
-                    delay *= 2;
-                }
-            }
-            return "https://via.placeholder.com/600x800/1e293b/ffffff?text=KOREAN+PATIENT"; // 백업 이미지
-        }
+        const appId = "dcamp-data-only-final";
+        const collectionName = "diabetes_dcamp_results_v25";
 
         const cases = [
             { 
-                age: 52, hba1c: 7.2, egfr: 88, bmi: 27.5, 
-                title: "기존 처방 불충분 환자",
-                meta: "KOREAN MALE | 50s | OVERWEIGHT",
-                imgPrompt: "A clinical portrait of a 52-year-old Korean male patient, slightly overweight, professional hospital lighting, cinematic high-resolution medical photography, wearing casual patient clothing, neutral background.",
-                desc: "52세 한국인 남성 환자입니다. 현재 메트포르민과 다파글리플로진 10mg을 복용 중이나 3개월 후 HbA1c 7.2%로 목표 혈당에 도달하지 않았습니다. 최신 가이드라인에 따른 최적의 변경 전략은?", 
+                age: 52, gender: "남성", hba1c: 7.2, egfr: 88, bmi: 27.5, 
+                title: "기존 요법 불충분 환자", meta: "50s | Male | Overweight",
+                desc: "이미 메트포르민과 다파글리플로진 10mg을 복용 중인 환자입니다. 3개월 후 HbA1c 7.2%로 목표 혈당에 도달하지 않았습니다. 최신 가이드라인에 따른 최적의 변경 전략은?", 
                 options: [
-                    {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'정답! 동일 SGLT2i 계열 내에서도 더 강력한 혈당 강하 및 심혈관 보호 효과가 검증된 엠파글리플로진 25mg으로의 변경이 추천됩니다.'}, 
-                    {name:'현재 처방 유지 및 생활습관 강조', score:0, msg:'목표 혈당 미도달 시에는 즉각적인 처방 조절(Therapeutic Inertia 방지)이 필요합니다.'}, 
-                    {name:'메트포르민 용량만 감량 처방', score:0, msg:'혈당이 높은 상황에서 약제 감량은 적절하지 않은 임상적 결정입니다.'}
+                    {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'정답! 동일 계열 내에서도 더 강력한 혈당 강하와 심혈관 보호 효과가 입증된 엠파글리플로진 25mg으로의 변경이 추천됩니다.'}, 
+                    {name:'다파글리플로진 10mg 처방 유지 및 생활습관 강조', score:0, msg:'목표 혈당 미도달 시 적극적인 처방 조절(Therapeutic Inertia 극복)이 필요합니다.'}, 
+                    {name:'메트포르민 용량만 50% 감량', score:0, msg:'혈당이 높은 상황에서 약제 감량은 권장되지 않습니다.'}
                 ] 
             },
             { 
-                age: 36, hba1c: 7.8, egfr: 98, bmi: 31.8, 
-                title: "젊은 고도비만 초진 여성",
-                meta: "KOREAN FEMALE | 30s | OBESE",
-                imgPrompt: "A clinical portrait of a 36-year-old Korean female patient, obese physical characteristic, kind face, professional high-resolution medical photography, cinematic lighting, hospital room setting.",
-                desc: "36세 한국인 여성 환자가 제2형 당뇨 초진으로 내원했습니다. HbA1c 7.8%이며 고도비만 상태입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '단독 급여'가 가능한 기준은 무엇입니까?", 
+                age: 36, gender: "여성", hba1c: 7.8, egfr: 98, bmi: 31.8, 
+                title: "비만 동반 젊은 여성 초진", meta: "30s | Female | Obese",
+                desc: "젊고 비만한 여성 환자가 당뇨 초진으로 내원했습니다. HbA1c 7.8%입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '단독 급여'가 가능한 기준은 무엇입니까?", 
                 options: [
-                    {name:'HbA1c 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'정답! 개정된 고시에 따라 HbA1c 7.5% 이상인 경우 메트포르민 없이도 SGLT2i 단독 처방 시 보험 급여가 인정됩니다.'}, 
-                    {name:'단독 처방은 무조건 비급여 대상', score:0, msg:'과거 기준입니다. 현재는 특정 수치(7.5%) 이상이면 단독 급여 혜택이 가능합니다.'}, 
-                    {name:'HbA1c 9.0% 이상인 경우에만 단독 가능', score:0, msg:'9.0%는 강력한 초기 병용요법의 기준입니다. 단독 급여 기준은 7.5%입니다.'}
+                    {name:'당화혈색소 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'정답! 개정된 보험 기준에 따라 HbA1c 7.5% 이상이면 SGLT2i 단독 처방 시에도 보험 급여가 인정됩니다.'}, 
+                    {name:'무조건 2제 이상 병용해야만 급여 인정', score:0, msg:'과거 기준입니다. 현재는 특정 수치 이상이면 단독 급여도 가능합니다.'}, 
+                    {name:'단독 처방은 어떤 경우에도 비급여', score:0, msg:'새로운 기준에 의해 환자 부담을 줄이면서 처방이 가능합니다.'}
                 ] 
             },
             { 
-                age: 65, hba1c: 7.9, egfr: 25, bmi: 23.2, 
-                title: "만성 신부전 4단계 환자",
-                meta: "KOREAN MALE | 60s | CKD PATIENT",
-                imgPrompt: "A clinical portrait of a 65-year-old elderly Korean male patient, thin build, slightly pale complexion indicating chronic illness, professional medical photography, cinematic lighting.",
-                desc: "신기능이 현저히 저하된(eGFR 25 mL/min) 65세 한국인 남성입니다. 유산산증(Lactic Acidosis) 발생 위험으로 인해 이 환자에게 '절대 금기'인 약제는?", 
+                age: 65, gender: "남성", hba1c: 7.9, egfr: 22, bmi: 23.2, 
+                title: "만성 신부전 4단계 환자", meta: "60s | Male | CKD Stage 4",
+                desc: "신기능이 현저히 저하된(eGFR 22 mL/min) 65세 남성입니다. 유산산증(Lactic Acidosis) 발생 위험으로 인해 이 환자에게 '절대 금기'인 약제는?", 
                 options: [
                     {name:'메트포르민 (Metformin)', score:1, msg:'정답! eGFR 30 mL/min 미만 환자에게 메트포르민은 치명적인 유산산증 위험이 있어 절대 금기입니다.'}, 
                     {name:'리나글립틴 (Linagliptin)', score:0, msg:'리나글립틴은 담즙 배설 약제로 신기능 저하와 무관하게 안전하게 사용 가능합니다.'}, 
-                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기는 아니지만 신기능이 낮으면 당 배출 효과가 거의 없어 혈당 조절 실익이 없습니다.'}
+                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기는 아니나 이 수준에서는 혈당 강하 효과가 거의 없어 실익이 없습니다.'}
                 ] 
             },
             { 
-                age: 58, hba1c: 8.5, egfr: 82, bmi: 30.2, 
-                title: "심부전 동반 당뇨 환자",
-                meta: "KOREAN MALE | 50s | HF HISTORY",
-                imgPrompt: "A clinical portrait of a 58-year-old Korean middle-aged male, stocky build, wearing a hospital gown, professional high-resolution medical photography, cinematic lighting.",
-                desc: "심부전(Heart Failure) 이력이 있는 58세 한국인 비만 환자입니다. 혈당 관리와 심부전 재입원 예방을 위해 최우선적으로 처방되어야 할 약제는?", 
+                age: 58, gender: "남성", hba1c: 8.5, egfr: 82, bmi: 30.2, 
+                title: "심부전 동반 비만 환자", meta: "50s | Male | Heart Failure",
+                desc: "심부전(Heart Failure) 이력이 있는 58세 비만 환자입니다. 당뇨 치료와 심부전 재입원 예방을 위해 최우선 처방되어야 할 약제 계열은?", 
                 options: [
                     {name:'SGLT2 억제제 (SGLT2i)', score:1, msg:'정답! SGLT2i는 심부전 입원 감소와 체중 감량 효과가 입증된 최적의 1차 선택 옵션입니다.'}, 
-                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 효과가 전혀 없으며 체중 증가 부작용이 있습니다.'}, 
-                    {name:'피오글리타존 (TZD)', score:0, msg:'부종 유발 위험으로 심부전 병력이 있는 환자에게는 매우 주의해야 합니다.'}
+                    {name:'피오글리타존 (TZD)', score:0, msg:'부종 유발 위험으로 심부전 병력이 있는 환자에게는 매우 주의해야 합니다.'}, 
+                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 혜택이 없으며 오히려 체중 증가를 유발합니다.'}
                 ] 
             },
             { 
-                age: 82, hba1c: 7.2, egfr: 58, bmi: 19.5, 
-                title: "초고령 저체중 남성",
-                meta: "KOREAN ELDERLY | 80s | FRAILTY",
-                imgPrompt: "A clinical portrait of an 82-year-old very thin elderly Korean male, frailty appearance, gentle expression, professional medical photography, cinematic lighting.",
+                age: 82, gender: "남성", hba1c: 7.2, egfr: 58, bmi: 19.5, 
+                title: "초고령 저체중 남성", meta: "80s | Male | Frailty",
                 desc: "82세 한국인 초고령 환자로 마른 체격이며 식사가 불규칙합니다. 저혈당 시 대처가 어려운 이 환자에게 가장 안전하게 처방 가능한 약제는?", 
                 options: [
                     {name:'DPP-4 억제제 (DPP-4i)', score:1, msg:'정답! 저혈당 위험이 극히 낮아 노쇠한 고령 환자에게 가장 안전하고 표준적인 처방입니다.'}, 
                     {name:'글리메피리드 (SU)', score:0, msg:'고령자에게 심각하고 지속적인 저혈당을 유발하여 사망 위험을 높일 수 있습니다.'}, 
-                    {name:'메트포르민 고용량', score:0, msg:'위장 장애와 식욕 부진을 유발하여 전신 상태를 더 악화시킬 수 있습니다.'}
+                    {name:'메트포르민 고용량', score:0, msg:'위장 장애와 식욕 부진을 유발하여 전신 상태를 악화시킬 수 있습니다.'}
                 ] 
             }
         ];
 
         let state = { currentIdx: 0, score: 0, userInfo: {} };
 
-        // [1] 등록 처리
         document.getElementById('reg-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('start-btn');
-            btn.innerText = "서버 연결 중...";
+            btn.innerText = "AUTHENTICATING...";
             btn.disabled = true;
             try {
                 await signInAnonymously(auth);
@@ -313,49 +263,32 @@
                 };
                 document.getElementById('step-register').classList.remove('active');
                 document.getElementById('step-game').classList.add('active');
-                await renderCase();
+                renderCase();
             } catch (err) {
-                alert("서버 연결 실패. Firebase 및 API 설정을 확인하세요.");
-                btn.innerText = "테스트 시작"; btn.disabled = false;
+                alert("서버 연결 실패. Firebase Anonymous Auth 설정을 확인하세요.");
+                btn.innerText = "Training Start"; btn.disabled = false;
             }
         };
 
-        const renderCase = async () => {
+        const renderCase = () => {
             const c = cases[state.currentIdx];
             document.getElementById('current-num').innerText = state.currentIdx + 1;
             document.getElementById('current-score').innerText = state.score;
             document.getElementById('case-description').innerText = c.desc;
             
-            // AI 이미지 생성 및 노출
-            document.getElementById('img-loader').classList.remove('hidden');
-            const patientImageUrl = await generatePatientImage(c.imgPrompt);
-            const imgEl = document.getElementById('p-image');
-            imgEl.src = patientImageUrl;
-            imgEl.onload = () => {
-                document.getElementById('img-loader').classList.add('hidden');
-            };
-            
             document.getElementById('p-meta').innerText = c.meta;
-            document.getElementById('p-title').innerText = c.title;
-            
             document.getElementById('val-hba1c').innerText = c.hba1c;
             document.getElementById('val-egfr').innerText = c.egfr;
             document.getElementById('val-bmi').innerText = c.bmi;
             document.getElementById('val-age').innerText = c.age;
             
-            // 게이지 바 애니메이션
-            document.getElementById('bar-hba1c').style.width = "0%";
-            document.getElementById('bar-egfr').style.width = "0%";
-            setTimeout(() => {
-                document.getElementById('bar-hba1c').style.width = Math.min(100, (c.hba1c * 10)) + "%";
-                document.getElementById('bar-egfr').style.width = Math.min(100, c.egfr) + "%";
-            }, 300);
+            updateRadarChart(c);
 
             const container = document.getElementById('options-container');
             container.innerHTML = '';
             c.options.forEach(opt => {
                 const b = document.createElement('div');
-                b.className = "option-card bg-white p-7 rounded-[2.2rem] font-bold text-gray-700 shadow-sm border-2 border-transparent text-[16px] leading-snug";
+                b.className = "option-card bg-white p-7 rounded-[2.2rem] font-bold text-gray-700 shadow-sm border-2 border-transparent text-[17px] leading-snug text-left";
                 b.innerText = opt.name;
                 b.onclick = () => {
                     state.score += opt.score;
@@ -364,10 +297,10 @@
                     document.getElementById('modal-title').innerText = opt.score > 0 ? "EXCELLENT" : "INCORRECT";
                     document.getElementById('modal-body').innerText = opt.msg;
                     modal.style.display = 'flex';
-                    document.getElementById('modal-btn').onclick = async () => {
+                    document.getElementById('modal-btn').onclick = () => {
                         modal.style.display = 'none';
                         state.currentIdx++;
-                        if (state.currentIdx < cases.length) await renderCase();
+                        if (state.currentIdx < cases.length) renderCase();
                         else finish();
                     };
                 };
@@ -375,11 +308,22 @@
             });
         };
 
+        const updateRadarChart = (data) => {
+            const center = 100, maxR = 80;
+            const sHb = Math.min(1, data.hba1c / 12), sEg = Math.min(1, data.egfr / 100);
+            const sBm = Math.min(1, data.bmi / 45), sAg = Math.min(1, data.age / 100);
+            const p1 = { x: center, y: center - (sHb * maxR) };
+            const p2 = { x: center + (sEg * maxR), y: center };
+            const p3 = { x: center, y: center + (sBm * maxR) };
+            const p4 = { x: center - (sAg * maxR), y: center };
+            document.getElementById('radar-polygon').setAttribute('points', `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`);
+        };
+
         const finish = async () => {
             document.getElementById('step-game').classList.remove('active');
             document.getElementById('step-result').classList.add('active');
             document.getElementById('final-score').innerText = state.score;
-            document.getElementById('save-status').innerText = "CLUSTERING RECORDS TO D-CAMP SERVER...";
+            document.getElementById('save-status').innerText = "SYCHRONIZING DATA...";
             
             try {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', collectionName), {
@@ -387,7 +331,7 @@
                     score: state.score,
                     timestamp: serverTimestamp()
                 });
-                document.getElementById('save-status').innerText = "✓ ALL DATA SYNCED SUCCESSFULLY";
+                document.getElementById('save-status').innerText = "✓ 모든 데이터가 서버에 기록되었습니다.";
             } catch (e) {
                 document.getElementById('save-status').innerText = "SYNC FAILED: CHECK FIREBASE RULES";
             }
@@ -401,7 +345,7 @@
 
         window.refreshData = async () => {
             const tbody = document.getElementById('admin-tbody');
-            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-300 italic uppercase font-black">Syncing Records...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-300 font-bold uppercase tracking-widest">Syncing Database...</td></tr>';
             try {
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collectionName));
                 let all = []; snap.forEach(d => all.push(d.data()));
@@ -409,24 +353,24 @@
                 
                 tbody.innerHTML = '';
                 if (all.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400">기록이 없습니다.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400 font-medium">기록이 없습니다.</td></tr>';
                     return;
                 }
 
                 all.forEach(item => {
                     const dts = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
                     const tr = document.createElement('tr');
-                    tr.className = "hover:bg-gray-50 transition-all";
+                    tr.className = "hover:bg-gray-50 transition-all text-left";
                     tr.innerHTML = `
                         <td class="py-6 text-[10px] text-gray-400 font-bold uppercase tracking-tight">${dts}</td>
-                        <td class="py-6"><div class="font-black text-gray-800 text-sm">${item.name}</div><div class="text-[10px] text-gray-400 font-mono">${item.empId}</div></td>
-                        <td class="py-6 text-[10px] text-gray-500 font-bold uppercase tracking-tighter">${item.dept}/${item.team}</td>
+                        <td class="py-6 text-left"><div class="font-black text-gray-800 text-sm">${item.name}</div><div class="text-[10px] text-gray-400 font-mono">${item.empId}</div></td>
+                        <td class="py-6 text-[10px] text-gray-500 font-bold uppercase tracking-tighter text-left">${item.dept}/${item.team}</td>
                         <td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs">${item.score}</span></td>
                     `;
                     tbody.appendChild(tr);
                 });
             } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic">ACCESS DENIED.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase">Access Denied.</td></tr>';
             }
         };
 
@@ -444,7 +388,7 @@
                 link.href = URL.createObjectURL(blob);
                 link.download = `DCAMP_CERT_REPORT.csv`;
                 link.click();
-            } catch (e) { alert("ERROR EXPORTING"); }
+            } catch (e) { alert("EXPORT ERROR"); }
         };
     </script>
 </body>
