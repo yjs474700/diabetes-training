@@ -14,10 +14,10 @@
         .option-card { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #f1f5f9; }
         .option-card:hover { transform: translateY(-4px); border-color: #2563eb; background-color: #eff6ff; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2); }
         .chart-bar { transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
-        .patient-img-wrapper { position: relative; border-radius: 2.5rem; overflow: hidden; background-color: #1e293b; aspect-ratio: 4/5; }
-        .patient-img-wrapper::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
+        .patient-img-wrapper { position: relative; border-radius: 2.5rem; overflow: hidden; background-color: #f1f5f9; aspect-ratio: 4/5; border: 1px solid #e2e8f0; }
         .data-card { background: white; border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #edf2f7; }
         #radar-polygon { transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .img-label { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; }
     </style>
 </head>
 <body class="min-h-screen">
@@ -61,11 +61,24 @@
             <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
                 <!-- 이미지 영역 -->
                 <div class="lg:col-span-5 data-card overflow-hidden relative">
-                    <img id="p-image" src="" alt="환자 이미지 로딩 중..." class="w-full h-full object-cover min-h-[400px]">
-                    <div id="img-error-msg" class="absolute inset-0 bg-gray-100 hidden items-center justify-center text-center p-10 text-xs text-gray-400 font-bold">
-                        사진 파일이 없습니다.<br>깃허브에 case번호.png 파일을 올려주세요.
+                    <div id="img-loading-indicator" class="absolute inset-0 flex items-center justify-center bg-gray-50 z-0">
+                        <span class="text-gray-300 text-xs font-bold animate-pulse">이미지 불러오는 중...</span>
                     </div>
-                    <div class="absolute bottom-8 left-8 z-10 text-white text-left">
+                    <img id="p-image" src="" alt="환자 이미지" class="w-full h-full object-cover min-h-[400px] relative z-10">
+                    
+                    <!-- 이미지 오류 시 안내 메시지 -->
+                    <div id="img-error-msg" class="absolute inset-0 bg-gray-100 hidden z-20 items-center justify-center text-center p-8">
+                        <div>
+                            <div class="text-4xl mb-4">🖼️</div>
+                            <p class="text-gray-500 text-sm font-bold leading-relaxed">
+                                사진을 찾을 수 없습니다.<br>
+                                <span class="text-red-500" id="missing-filename"></span><br>
+                                파일을 깃허브에 올렸는지 확인하세요.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="img-label z-30 text-left">
                         <div id="p-meta" class="text-[10px] font-bold opacity-70 mb-1 tracking-widest uppercase"></div>
                         <div id="p-title" class="text-3xl font-black leading-tight tracking-tighter">Case Patient</div>
                     </div>
@@ -74,7 +87,6 @@
                 <!-- 데이터 영역 -->
                 <div class="lg:col-span-7 data-card p-10 md:p-12 flex flex-col justify-center">
                     <div class="flex flex-col md:flex-row items-center gap-12">
-                        <!-- Radar Chart -->
                         <div class="w-full md:w-1/2 flex justify-center">
                             <svg width="220" height="220" viewBox="0 0 200 200" class="overflow-visible">
                                 <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" stroke-width="1" />
@@ -89,21 +101,20 @@
                                 <polygon id="radar-polygon" points="" fill="rgba(37, 99, 235, 0.25)" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <!-- Numbers -->
-                        <div class="w-full md:w-1/2 grid grid-cols-2 gap-4">
-                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                        <div class="w-full md:w-1/2 grid grid-cols-2 gap-4 text-left">
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                                 <div class="text-[9px] font-black text-gray-400 uppercase mb-1">HbA1c (%)</div>
                                 <div id="val-hba1c" class="text-2xl font-black text-red-500"></div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                                 <div class="text-[9px] font-black text-gray-400 uppercase mb-1">eGFR</div>
                                 <div id="val-egfr" class="text-xl font-black text-blue-600"></div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                                 <div class="text-[9px] font-black text-gray-400 uppercase mb-1">BMI</div>
                                 <div id="val-bmi" class="text-xl font-black text-gray-800"></div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
                                 <div class="text-[9px] font-black text-gray-400 uppercase mb-1">Age</div>
                                 <div id="val-age" class="text-xl font-black text-gray-800"></div>
                             </div>
@@ -112,7 +123,7 @@
                 </div>
             </div>
 
-            <!-- 케이스 노트 및 선택지 -->
+            <!-- 하단 텍스트 및 선택지 -->
             <div class="max-w-4xl mx-auto">
                 <div class="p-8 bg-white rounded-[2.5rem] border-2 border-blue-50 shadow-sm mb-8 relative overflow-hidden text-left">
                     <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
@@ -129,14 +140,14 @@
         <div id="step-result" class="step-content hidden text-center bg-white rounded-[4rem] p-16 shadow-2xl border border-gray-50 max-w-2xl mx-auto">
             <div id="result-emoji" class="text-9xl mb-8">🏅</div>
             <h2 class="text-4xl font-black mb-4 text-gray-800 tracking-tighter">트레이닝 완료</h2>
-            <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic text-center">모든 응시 결과는 <br><span class="text-blue-600 font-black tracking-tight">D-CAMP CENTRAL SERVER</span>로 전송되었습니다.</p>
+            <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic text-center">모든 응시 결과는 <br><span class="text-blue-600 font-black tracking-tight">D-CAMP 중앙 서버</span>로 전송되었습니다.</p>
             
             <div class="bg-gray-900 p-14 rounded-[3.5rem] mb-12 shadow-2xl border-b-8 border-blue-600 text-left relative overflow-hidden">
                 <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest">TOTAL CERTIFICATION SCORE</div>
                 <div class="text-9xl font-black text-white leading-none tracking-tighter"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium">/ 5</span></div>
             </div>
             
-            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse"></p>
+            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic"></p>
             <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase">↺ RETAKE TRAINING</button>
             
             <div class="mt-20 pt-10 border-t border-gray-100">
@@ -146,22 +157,22 @@
 
         <!-- [4] 관리자 모달 -->
         <div id="admin-modal" class="fixed inset-0 bg-black/85 backdrop-blur-3xl hidden items-center justify-center p-6 z-[200]">
-            <div class="bg-white w-full max-w-4xl rounded-[3.5rem] p-12 max-h-[85vh] overflow-hidden flex flex-col shadow-2xl">
-                <div class="flex justify-between items-center mb-10 text-left">
+            <div class="bg-white w-full max-w-4xl rounded-[3.5rem] p-12 max-h-[85vh] overflow-hidden flex flex-col shadow-2xl text-left">
+                <div class="flex justify-between items-center mb-10">
                     <div>
-                        <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3 italic">D-CAMP REPORT</h3>
+                        <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3 italic uppercase">D-CAMP Report</h3>
                         <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black">All-Employee Result Clustering</p>
                     </div>
                     <button onclick="closeAdmin()" class="text-gray-300 hover:text-gray-800 text-6xl transition-colors">&times;</button>
                 </div>
-                <div class="flex space-x-4 mb-10 text-left">
+                <div class="flex space-x-4 mb-10">
                     <button onclick="refreshData()" class="flex-1 bg-gray-100 text-gray-900 py-6 rounded-[2rem] text-xs font-black hover:bg-gray-200 transition-all tracking-[0.2em] uppercase">🔄 Sync Records</button>
-                    <button onclick="exportCSV()" class="flex-1 bg-green-600 text-white py-6 rounded-[2rem] text-xs font-black shadow-lg hover:bg-green-700 transition-all tracking-[0.2em] uppercase">📊 Export CSV</button>
+                    <button onclick="exportCSV()" class="flex-1 bg-green-600 text-white py-6 rounded-[2rem] text-xs font-black shadow-lg hover:bg-green-700 transition-all tracking-[0.2em] uppercase">📊 Export Excel</button>
                 </div>
                 <div class="overflow-y-auto flex-1 pr-4 custom-scrollbar">
                     <table class="w-full text-left">
-                        <thead class="sticky top-0 bg-white text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-4">
-                            <tr><th class="pb-6">DATE</th><th class="pb-6">NAME (ID)</th><th class="pb-6">DEPT/TEAM</th><th class="pb-6 text-center">SCORE</th></tr>
+                        <thead class="sticky top-0 bg-white text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-4 text-left">
+                            <tr><th class="pb-6">Date</th><th class="pb-6">Name (ID)</th><th class="pb-6">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
                         </thead>
                         <tbody id="admin-tbody" class="text-sm divide-y divide-gray-50 text-left"></tbody>
                     </table>
@@ -185,7 +196,6 @@
         import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // 사용자 Firebase 설정
         const firebaseConfig = {
             apiKey: "AIzaSyB475AzDr96EP6I7YsyZx3OjnYDMuMaq7k",
             authDomain: "diabetes-sales.firebaseapp.com",
@@ -198,10 +208,10 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "d-camp-v30-final";
-        const collectionName = "diabetes_dcamp_v30";
+        const appId = "d-camp-v35-final";
+        const collectionName = "diabetes_dcamp_v35";
 
-        // 사진 파일 이름 설정 완료 (case1.png ~ case5.png)
+        // 사용자 정의 파일명 (case1.png ~ case5.png)
         const cases = [
             { 
                 age: 52, hba1c: 7.2, egfr: 88, bmi: 27.5, 
@@ -210,7 +220,7 @@
                 options: [
                     {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'정답! 동일 계열 내에서도 더 강력한 혈당 강하와 심혈관 보호 효과가 입증된 엠파글리플로진 25mg으로의 변경이 추천됩니다.'}, 
                     {name:'다파글리플로진 10mg 처방 유지', score:0, msg:'목표 혈당 미도달 시 신속하게 약제를 조절하여 치료 적기를 놓치지 않는 것이 중요합니다.'}, 
-                    {name:'메트포르민 용량만 50% 감량 처방', score:0, msg:'혈당이 높은 상황에서 약제 감량은 질환 관리를 악화시킵니다.'}
+                    {name:'메트포르민 용량만 50% 감량 처방', score:0, msg:'혈당이 높은 상황에서 약제 감량은 임상적으로 부적절합니다.'}
                 ] 
             },
             { 
@@ -219,7 +229,7 @@
                 desc: "젊고 비만한 여성 환자가 당뇨 초진으로 내원했습니다. HbA1c 7.8%입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '단독 급여'가 가능한 기준은 무엇입니까?", 
                 options: [
                     {name:'당화혈색소 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'정답! 개정된 고시에 따라 HbA1c 7.5% 이상이거나 메트포르민을 쓸 수 없는 경우 SGLT2i 단독 처방도 보험 급여가 인정됩니다.'}, 
-                    {name:'무조건 2제 이상 병용해야만 급여 가능', score:0, msg:'과거 기준입니다. 현재는 특정 수치 이상이면 단독 급여도 가능합니다.'}, 
+                    {name:'무조건 2제 이상 병용해야만 급여 가능', score:0, msg:'과거 기준입니다. 현재는 7.5% 이상 시 단독 급여도 가능합니다.'}, 
                     {name:'단독 처방은 보험 혜택이 전혀 없음', score:0, msg:'새로운 급여 기준에 의해 환자 부담을 줄일 수 있는 길이 열렸습니다.'}
                 ] 
             },
@@ -230,16 +240,16 @@
                 options: [
                     {name:'메트포르민 (Metformin)', score:1, msg:'정답! eGFR 30 mL/min 미만 환자에게 메트포르민은 치명적인 유산산증 위험이 있어 절대 금기입니다.'}, 
                     {name:'리나글립틴 (Linagliptin)', score:0, msg:'리나글립틴은 담즙 배설 약제로 신기능 저하와 무관하게 안전하게 사용 가능합니다.'}, 
-                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기는 아니지만 신기능이 낮으면 당 배출 효과가 거의 없어 실익이 없습니다.'}
+                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기는 아니지만 신기능이 낮으면 당 배출 효과가 상실되어 실익이 없습니다.'}
                 ] 
             },
             { 
                 age: 58, hba1c: 8.5, egfr: 82, bmi: 30.2, 
-                img: "case4.png", title: "심부전 동반 당뇨 환자", meta: "KOREAN MALE | 58Y | HF HISTORY",
-                desc: "심부전(Heart Failure) 이력이 있는 58세 비만 환자입니다. 당뇨 치료와 심부전 재입원 예방을 위해 최우선 처방되어야 할 약제 계열은?", 
+                img: "case4.png", title: "심부전 병력 비만 환자", meta: "KOREAN MALE | 58Y | HF HISTORY",
+                desc: "심부전(Heart Failure) 이력이 있는 58세 비만 환자입니다. 심부전 재입원 예방과 체중 감량 효과를 동시에 기대할 수 있는 1차 선택 약제는?", 
                 options: [
                     {name:'SGLT2 억제제 (SGLT2i)', score:1, msg:'정답! SGLT2i는 심부전 입원 감소와 체중 감량 효과가 입증된 최적의 1차 선택 옵션입니다.'}, 
-                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 효과가 없으며 오히려 체중 증가를 유발합니다.'}, 
+                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 혜택이 없으며 오히려 체중 증가를 유발합니다.'}, 
                     {name:'피오글리타존 (TZD)', score:0, msg:'부종 유발 위험으로 심부전 병력이 있는 환자에게는 매우 주의해야 합니다.'}
                 ] 
             },
@@ -257,7 +267,6 @@
 
         let state = { currentIdx: 0, score: 0, userInfo: {} };
 
-        // [1] 등록
         document.getElementById('reg-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('start-btn');
@@ -274,12 +283,11 @@
                 document.getElementById('step-game').classList.add('active');
                 renderCase();
             } catch (err) {
-                alert("서버 연결 실패. 파이어베이스의 'Anonymous' 설정을 확인하세요.");
+                alert("연결 실패. 파이어베이스의 'Anonymous' 설정을 확인하세요.");
                 btn.innerText = "Training Start"; btn.disabled = false;
             }
         };
 
-        // [2] 렌더링
         const renderCase = () => {
             const c = cases[state.currentIdx];
             document.getElementById('current-num').innerText = state.currentIdx + 1;
@@ -295,12 +303,18 @@
             
             const imgEl = document.getElementById('p-image');
             const errorBox = document.getElementById('img-error-msg');
+            const missingText = document.getElementById('missing-filename');
+            
+            // 이미지 주소 설정 (깃허브 주소를 고려하여 상대 경로 사용)
             imgEl.src = c.img;
-            imgEl.style.display = "block";
-            errorBox.style.display = "none";
+            errorBox.classList.add('hidden');
+            imgEl.classList.remove('hidden');
+
             imgEl.onerror = () => {
-                imgEl.style.display = "none";
-                errorBox.style.display = "flex";
+                imgEl.classList.add('hidden');
+                errorBox.classList.remove('hidden');
+                errorBox.classList.add('flex');
+                missingText.innerText = `찾고 있는 파일명: "${c.img}"`;
             };
             
             updateRadarChart(c);
@@ -309,7 +323,7 @@
             container.innerHTML = '';
             c.options.forEach(opt => {
                 const b = document.createElement('div');
-                b.className = "option-card bg-white p-7 rounded-[2.2rem] font-bold text-gray-700 shadow-sm border-2 border-transparent text-[16px] leading-snug text-left";
+                b.className = "option-card bg-white p-7 rounded-[2.2rem] font-bold text-gray-700 shadow-sm border-2 border-transparent text-[17px] leading-snug text-left";
                 b.innerText = opt.name;
                 b.onclick = () => {
                     state.score += opt.score;
@@ -340,10 +354,9 @@
             document.getElementById('radar-polygon').setAttribute('points', `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`);
         };
 
-        // [3] 종료 및 저장
         const finish = async () => {
             document.getElementById('step-game').classList.remove('active');
-            document.getElementById('step-result').classList.add('active');
+            document.getElementById('step-result').classList.remove('hidden');
             document.getElementById('final-score').innerText = state.score;
             document.getElementById('save-status').innerText = "SYNCHRONIZING DATA...";
             try {
@@ -371,10 +384,10 @@
                     const dts = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR') : '-';
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-gray-50 transition-all text-left";
-                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold uppercase tracking-tight">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left">${item.name} (${item.empId})</td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase tracking-tighter text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs">${item.score}</span></td>`;
+                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold uppercase tracking-tight">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left text-left">${item.name} (${item.empId})</td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase tracking-tighter text-left text-left text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs">${item.score}</span></td>`;
                     tbody.appendChild(tr);
                 });
-            } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black">Access Denied.</td></tr>'; }
+            } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase">Access Denied.</td></tr>'; }
         };
 
         window.exportCSV = async () => {
