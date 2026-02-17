@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>D-CAMP: Diabetes Master Sim</title>
+    <title>D-CAMP: Diabetes Master Simulation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@400;600;700;900&display=swap');
@@ -13,21 +13,24 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .option-card { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #f1f5f9; }
         .option-card:hover { transform: translateY(-4px); border-color: #2563eb; background-color: #eff6ff; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2); }
+        .chart-bar { transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .patient-img-wrapper { position: relative; border-radius: 2.5rem; overflow: hidden; background-color: #1e293b; aspect-ratio: 4/5; }
+        .patient-img-wrapper::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.85) 0%, transparent 60%); }
         .data-card { background: white; border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #edf2f7; }
         #radar-polygon { transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
     </style>
 </head>
 <body class="min-h-screen">
-    <div id="app" class="max-w-4xl mx-auto px-4 py-8 md:py-16">
+    <div id="app" class="max-w-5xl mx-auto px-4 py-8 md:py-16">
         
         <!-- [1] 등록 화면 -->
-        <div id="step-register" class="step-content active bg-white rounded-[3rem] p-10 md:p-16 shadow-2xl border border-gray-100 text-center max-w-2xl mx-auto">
+        <div id="step-register" class="step-content active bg-white rounded-[3.5rem] p-10 md:p-16 shadow-2xl border border-gray-100 text-center max-w-2xl mx-auto">
             <div class="mb-12">
-                <div class="inline-block px-10 py-5 bg-gray-900 text-white rounded-3xl mb-8 shadow-xl">
+                <div class="inline-block px-10 py-5 bg-gray-900 text-white rounded-3xl mb-8 shadow-xl border-b-4 border-blue-600">
                     <span class="text-5xl font-[900] italic tracking-tighter uppercase">D-CAMP</span>
                 </div>
-                <h1 class="text-3xl font-black text-gray-800 tracking-tight leading-tight">당뇨 약제 처방 시뮬레이션</h1>
-                <p class="text-gray-400 mt-3 font-semibold uppercase tracking-widest text-xs">Medical Sales Performance Data System</p>
+                <h1 class="text-3xl font-black text-gray-800 tracking-tight leading-tight">당뇨약 처방 시뮬레이션</h1>
+                <p class="text-gray-400 mt-3 font-semibold uppercase tracking-widest text-xs">Medical Sales Expert Training</p>
             </div>
             
             <form id="reg-form" class="space-y-4 max-w-sm mx-auto text-left">
@@ -41,11 +44,11 @@
             </form>
         </div>
 
-        <!-- [2] 게임 화면 (데이터 시각화) -->
+        <!-- [2] 게임 화면 -->
         <div id="step-game" class="step-content">
-            <div class="flex justify-between items-end mb-8 px-2">
-                <div class="flex flex-col">
-                    <span class="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-none mb-2 italic">Clinical Case Analysis</span>
+            <div class="flex justify-between items-center mb-8 px-2">
+                <div class="flex flex-col text-left">
+                    <span class="text-gray-400 text-[10px] font-bold uppercase tracking-widest leading-none mb-2 italic">D-CAMP Performance Test</span>
                     <span class="text-4xl font-black text-gray-800 tracking-tighter">CASE #<span id="current-num">1</span></span>
                 </div>
                 <div class="text-right">
@@ -54,62 +57,67 @@
                 </div>
             </div>
 
-            <!-- 다각형 그래프 대시보드 -->
-            <div class="data-card p-8 md:p-12 mb-8 flex flex-col md:flex-row items-center gap-12">
-                <!-- Radar Chart Area -->
-                <div class="w-full md:w-1/2 flex justify-center relative">
-                    <svg width="260" height="260" viewBox="0 0 200 200" class="overflow-visible">
-                        <!-- BG Layers -->
-                        <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" stroke-width="1" />
-                        <circle cx="100" cy="100" r="60" fill="none" stroke="#f1f5f9" stroke-width="1" />
-                        <circle cx="100" cy="100" r="40" fill="none" stroke="#f8fafc" stroke-width="1" />
-                        <!-- Axis -->
-                        <line x1="100" y1="20" x2="100" y2="180" stroke="#e2e8f0" stroke-width="1" />
-                        <line x1="20" y1="100" x2="180" y2="100" stroke="#e2e8f0" stroke-width="1" />
-                        <!-- Labels -->
-                        <text x="100" y="8" text-anchor="middle" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">HbA1c</text>
-                        <text x="195" y="103" text-anchor="start" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">eGFR</text>
-                        <text x="100" y="198" text-anchor="middle" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">BMI</text>
-                        <text x="5" y="103" text-anchor="end" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">Age</text>
-                        <!-- Polygon -->
-                        <polygon id="radar-polygon" points="" fill="rgba(37, 99, 235, 0.25)" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
-                    </svg>
-                </div>
-
-                <!-- Numerical Data Area -->
-                <div class="w-full md:w-1/2 space-y-6">
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
-                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">HbA1c (%)</div>
-                            <div id="val-hba1c" class="text-2xl font-black text-red-500"></div>
-                        </div>
-                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
-                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">eGFR (mL)</div>
-                            <div id="val-egfr" class="text-2xl font-black text-blue-600"></div>
-                        </div>
-                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
-                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">BMI (kg/m²)</div>
-                            <div id="val-bmi" class="text-2xl font-black text-gray-800"></div>
-                        </div>
-                        <div class="bg-gray-50 p-5 rounded-3xl border border-gray-100">
-                            <div class="text-[10px] font-bold text-gray-400 uppercase mb-2 tracking-widest leading-none">나이 (Age)</div>
-                            <div id="val-age" class="text-2xl font-black text-gray-800"></div>
-                        </div>
+            <!-- 시각화 메인 보드 -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8">
+                <!-- 이미지 영역 -->
+                <div class="lg:col-span-5 data-card overflow-hidden relative">
+                    <img id="p-image" src="" alt="환자 이미지 로딩 중..." class="w-full h-full object-cover min-h-[400px]">
+                    <div id="img-error-msg" class="absolute inset-0 bg-gray-100 hidden items-center justify-center text-center p-10 text-xs text-gray-400 font-bold">
+                        사진 파일이 없습니다.<br>깃허브에 case번호.png 파일을 올려주세요.
                     </div>
-                    <div class="bg-blue-600/5 p-5 rounded-[1.5rem] border border-blue-600/10 text-left">
-                        <div class="flex items-center space-x-2 text-blue-800">
-                            <span class="text-xs font-black uppercase tracking-widest">Case Profile:</span>
-                            <span id="p-meta" class="text-xs font-bold"></span>
+                    <div class="absolute bottom-8 left-8 z-10 text-white text-left">
+                        <div id="p-meta" class="text-[10px] font-bold opacity-70 mb-1 tracking-widest uppercase"></div>
+                        <div id="p-title" class="text-3xl font-black leading-tight tracking-tighter">Case Patient</div>
+                    </div>
+                </div>
+                
+                <!-- 데이터 영역 -->
+                <div class="lg:col-span-7 data-card p-10 md:p-12 flex flex-col justify-center">
+                    <div class="flex flex-col md:flex-row items-center gap-12">
+                        <!-- Radar Chart -->
+                        <div class="w-full md:w-1/2 flex justify-center">
+                            <svg width="220" height="220" viewBox="0 0 200 200" class="overflow-visible">
+                                <circle cx="100" cy="100" r="80" fill="none" stroke="#e2e8f0" stroke-width="1" />
+                                <circle cx="100" cy="100" r="60" fill="none" stroke="#f1f5f9" stroke-width="1" />
+                                <circle cx="100" cy="100" r="40" fill="none" stroke="#f8fafc" stroke-width="1" />
+                                <line x1="100" y1="20" x2="100" y2="180" stroke="#e2e8f0" stroke-width="1" />
+                                <line x1="20" y1="100" x2="180" y2="100" stroke="#e2e8f0" stroke-width="1" />
+                                <text x="100" y="8" text-anchor="middle" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">HbA1c</text>
+                                <text x="195" y="103" text-anchor="start" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">eGFR</text>
+                                <text x="100" y="198" text-anchor="middle" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">BMI</text>
+                                <text x="5" y="103" text-anchor="end" font-size="9" font-weight="900" fill="#94a3b8" class="uppercase">Age</text>
+                                <polygon id="radar-polygon" points="" fill="rgba(37, 99, 235, 0.25)" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
+                            </svg>
+                        </div>
+                        <!-- Numbers -->
+                        <div class="w-full md:w-1/2 grid grid-cols-2 gap-4">
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1">HbA1c (%)</div>
+                                <div id="val-hba1c" class="text-2xl font-black text-red-500"></div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1">eGFR</div>
+                                <div id="val-egfr" class="text-xl font-black text-blue-600"></div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1">BMI</div>
+                                <div id="val-bmi" class="text-xl font-black text-gray-800"></div>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 text-left">
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1">Age</div>
+                                <div id="val-age" class="text-xl font-black text-gray-800"></div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="mb-12">
+            <!-- 케이스 노트 및 선택지 -->
+            <div class="max-w-4xl mx-auto">
                 <div class="p-8 bg-white rounded-[2.5rem] border-2 border-blue-50 shadow-sm mb-8 relative overflow-hidden text-left">
                     <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
                     <h3 class="text-[11px] font-black text-blue-800 mb-4 uppercase tracking-[0.2em] flex items-center leading-none">
-                        <span class="w-2 h-2 bg-blue-600 rounded-full mr-3 animate-ping"></span> Physician Clinical Note
+                        <span class="w-2 h-2 bg-blue-600 rounded-full mr-3 animate-ping"></span> Clinical Record / Medical Note
                     </h3>
                     <p class="text-[18px] text-gray-700 leading-relaxed font-bold italic" id="case-description"></p>
                 </div>
@@ -121,14 +129,14 @@
         <div id="step-result" class="step-content hidden text-center bg-white rounded-[4rem] p-16 shadow-2xl border border-gray-50 max-w-2xl mx-auto">
             <div id="result-emoji" class="text-9xl mb-8">🏅</div>
             <h2 class="text-4xl font-black mb-4 text-gray-800 tracking-tighter">트레이닝 완료</h2>
-            <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic">모든 응시 결과는 <span class="text-blue-600 font-black tracking-tight">D-CAMP 중앙 서버</span>로<br>성공적으로 전송되었습니다.</p>
+            <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic text-center">모든 응시 결과는 <br><span class="text-blue-600 font-black tracking-tight">D-CAMP CENTRAL SERVER</span>로 전송되었습니다.</p>
             
             <div class="bg-gray-900 p-14 rounded-[3.5rem] mb-12 shadow-2xl border-b-8 border-blue-600 text-left relative overflow-hidden">
                 <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest">TOTAL CERTIFICATION SCORE</div>
                 <div class="text-9xl font-black text-white leading-none tracking-tighter"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium">/ 5</span></div>
             </div>
             
-            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic"></p>
+            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse"></p>
             <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase">↺ RETAKE TRAINING</button>
             
             <div class="mt-20 pt-10 border-t border-gray-100">
@@ -142,18 +150,18 @@
                 <div class="flex justify-between items-center mb-10 text-left">
                     <div>
                         <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3 italic">D-CAMP REPORT</h3>
-                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black">Real-time Employee Result Clustering</p>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black">All-Employee Result Clustering</p>
                     </div>
                     <button onclick="closeAdmin()" class="text-gray-300 hover:text-gray-800 text-6xl transition-colors">&times;</button>
                 </div>
-                <div class="flex space-x-4 mb-10">
-                    <button onclick="refreshData()" class="flex-1 bg-gray-100 text-gray-900 py-6 rounded-[2rem] text-xs font-black hover:bg-gray-200 transition-all tracking-[0.2em] uppercase">🔄 Sync Data</button>
-                    <button onclick="exportCSV()" class="flex-1 bg-green-600 text-white py-6 rounded-[2rem] text-xs font-black shadow-lg hover:bg-green-700 transition-all tracking-[0.2em] uppercase">📊 엑셀 다운로드</button>
+                <div class="flex space-x-4 mb-10 text-left">
+                    <button onclick="refreshData()" class="flex-1 bg-gray-100 text-gray-900 py-6 rounded-[2rem] text-xs font-black hover:bg-gray-200 transition-all tracking-[0.2em] uppercase">🔄 Sync Records</button>
+                    <button onclick="exportCSV()" class="flex-1 bg-green-600 text-white py-6 rounded-[2rem] text-xs font-black shadow-lg hover:bg-green-700 transition-all tracking-[0.2em] uppercase">📊 Export CSV</button>
                 </div>
                 <div class="overflow-y-auto flex-1 pr-4 custom-scrollbar">
-                    <table class="w-full text-left border-collapse">
+                    <table class="w-full text-left">
                         <thead class="sticky top-0 bg-white text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-4">
-                            <tr><th class="pb-6">Date</th><th class="pb-6">Name (ID)</th><th class="pb-6">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
+                            <tr><th class="pb-6">DATE</th><th class="pb-6">NAME (ID)</th><th class="pb-6">DEPT/TEAM</th><th class="pb-6 text-center">SCORE</th></tr>
                         </thead>
                         <tbody id="admin-tbody" class="text-sm divide-y divide-gray-50 text-left"></tbody>
                     </table>
@@ -163,12 +171,12 @@
     </div>
 
     <!-- Feedback Modal -->
-    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-lg hidden items-center justify-center p-6 z-[100]">
+    <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl hidden items-center justify-center p-6 z-[100]">
         <div class="bg-white rounded-[4rem] p-14 max-w-sm w-full shadow-2xl text-center">
             <div id="modal-icon" class="text-9xl mb-8"></div>
-            <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none"></h3>
+            <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none text-center"></h3>
             <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic text-center"></p>
-            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all">다음 케이스 분석</button>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all">다음 환자 분석</button>
         </div>
     </div>
 
@@ -190,69 +198,70 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "dcamp-data-only-final";
-        const collectionName = "diabetes_dcamp_results_v25";
+        const appId = "d-camp-v30-final";
+        const collectionName = "diabetes_dcamp_v30";
 
+        // 사진 파일 이름 설정 완료 (case1.png ~ case5.png)
         const cases = [
             { 
-                age: 52, gender: "남성", hba1c: 7.2, egfr: 88, bmi: 27.5, 
-                title: "기존 요법 불충분 환자", meta: "50s | Male | Overweight",
+                age: 52, hba1c: 7.2, egfr: 88, bmi: 27.5, 
+                img: "case1.png", title: "기존 요법 불충분 환자", meta: "KOREAN MALE | 52Y | OVERWEIGHT",
                 desc: "이미 메트포르민과 다파글리플로진 10mg을 복용 중인 환자입니다. 3개월 후 HbA1c 7.2%로 목표 혈당에 도달하지 않았습니다. 최신 가이드라인에 따른 최적의 변경 전략은?", 
                 options: [
                     {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'정답! 동일 계열 내에서도 더 강력한 혈당 강하와 심혈관 보호 효과가 입증된 엠파글리플로진 25mg으로의 변경이 추천됩니다.'}, 
-                    {name:'다파글리플로진 10mg 처방 유지 및 생활습관 강조', score:0, msg:'목표 혈당 미도달 시 적극적인 처방 조절(Therapeutic Inertia 극복)이 필요합니다.'}, 
-                    {name:'메트포르민 용량만 50% 감량', score:0, msg:'혈당이 높은 상황에서 약제 감량은 권장되지 않습니다.'}
+                    {name:'다파글리플로진 10mg 처방 유지', score:0, msg:'목표 혈당 미도달 시 신속하게 약제를 조절하여 치료 적기를 놓치지 않는 것이 중요합니다.'}, 
+                    {name:'메트포르민 용량만 50% 감량 처방', score:0, msg:'혈당이 높은 상황에서 약제 감량은 질환 관리를 악화시킵니다.'}
                 ] 
             },
             { 
-                age: 36, gender: "여성", hba1c: 7.8, egfr: 98, bmi: 31.8, 
-                title: "비만 동반 젊은 여성 초진", meta: "30s | Female | Obese",
+                age: 36, hba1c: 7.8, egfr: 98, bmi: 31.2, 
+                img: "case2.png", title: "비만 동반 젊은 여성 초진", meta: "KOREAN FEMALE | 36Y | OBESE",
                 desc: "젊고 비만한 여성 환자가 당뇨 초진으로 내원했습니다. HbA1c 7.8%입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '단독 급여'가 가능한 기준은 무엇입니까?", 
                 options: [
-                    {name:'당화혈색소 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'정답! 개정된 보험 기준에 따라 HbA1c 7.5% 이상이면 SGLT2i 단독 처방 시에도 보험 급여가 인정됩니다.'}, 
-                    {name:'무조건 2제 이상 병용해야만 급여 인정', score:0, msg:'과거 기준입니다. 현재는 특정 수치 이상이면 단독 급여도 가능합니다.'}, 
-                    {name:'단독 처방은 어떤 경우에도 비급여', score:0, msg:'새로운 기준에 의해 환자 부담을 줄이면서 처방이 가능합니다.'}
+                    {name:'당화혈색소 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'정답! 개정된 고시에 따라 HbA1c 7.5% 이상이거나 메트포르민을 쓸 수 없는 경우 SGLT2i 단독 처방도 보험 급여가 인정됩니다.'}, 
+                    {name:'무조건 2제 이상 병용해야만 급여 가능', score:0, msg:'과거 기준입니다. 현재는 특정 수치 이상이면 단독 급여도 가능합니다.'}, 
+                    {name:'단독 처방은 보험 혜택이 전혀 없음', score:0, msg:'새로운 급여 기준에 의해 환자 부담을 줄일 수 있는 길이 열렸습니다.'}
                 ] 
             },
             { 
-                age: 65, gender: "남성", hba1c: 7.9, egfr: 22, bmi: 23.2, 
-                title: "만성 신부전 4단계 환자", meta: "60s | Male | CKD Stage 4",
+                age: 65, hba1c: 7.9, egfr: 22, bmi: 23.4, 
+                img: "case3.png", title: "만성 신부전 4단계 환자", meta: "KOREAN MALE | 65Y | CKD STAGE 4",
                 desc: "신기능이 현저히 저하된(eGFR 22 mL/min) 65세 남성입니다. 유산산증(Lactic Acidosis) 발생 위험으로 인해 이 환자에게 '절대 금기'인 약제는?", 
                 options: [
                     {name:'메트포르민 (Metformin)', score:1, msg:'정답! eGFR 30 mL/min 미만 환자에게 메트포르민은 치명적인 유산산증 위험이 있어 절대 금기입니다.'}, 
                     {name:'리나글립틴 (Linagliptin)', score:0, msg:'리나글립틴은 담즙 배설 약제로 신기능 저하와 무관하게 안전하게 사용 가능합니다.'}, 
-                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기는 아니나 이 수준에서는 혈당 강하 효과가 거의 없어 실익이 없습니다.'}
+                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기는 아니지만 신기능이 낮으면 당 배출 효과가 거의 없어 실익이 없습니다.'}
                 ] 
             },
             { 
-                age: 58, gender: "남성", hba1c: 8.5, egfr: 82, bmi: 30.2, 
-                title: "심부전 동반 비만 환자", meta: "50s | Male | Heart Failure",
+                age: 58, hba1c: 8.5, egfr: 82, bmi: 30.2, 
+                img: "case4.png", title: "심부전 동반 당뇨 환자", meta: "KOREAN MALE | 58Y | HF HISTORY",
                 desc: "심부전(Heart Failure) 이력이 있는 58세 비만 환자입니다. 당뇨 치료와 심부전 재입원 예방을 위해 최우선 처방되어야 할 약제 계열은?", 
                 options: [
                     {name:'SGLT2 억제제 (SGLT2i)', score:1, msg:'정답! SGLT2i는 심부전 입원 감소와 체중 감량 효과가 입증된 최적의 1차 선택 옵션입니다.'}, 
-                    {name:'피오글리타존 (TZD)', score:0, msg:'부종 유발 위험으로 심부전 병력이 있는 환자에게는 매우 주의해야 합니다.'}, 
-                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 혜택이 없으며 오히려 체중 증가를 유발합니다.'}
+                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 효과가 없으며 오히려 체중 증가를 유발합니다.'}, 
+                    {name:'피오글리타존 (TZD)', score:0, msg:'부종 유발 위험으로 심부전 병력이 있는 환자에게는 매우 주의해야 합니다.'}
                 ] 
             },
             { 
-                age: 82, gender: "남성", hba1c: 7.2, egfr: 58, bmi: 19.5, 
-                title: "초고령 저체중 남성", meta: "80s | Male | Frailty",
+                age: 82, hba1c: 7.2, egfr: 58, bmi: 19.5, 
+                img: "case5.png", title: "초고령 저체중 남성", meta: "KOREAN ELDERLY | 82Y | FRAILTY",
                 desc: "82세 한국인 초고령 환자로 마른 체격이며 식사가 불규칙합니다. 저혈당 시 대처가 어려운 이 환자에게 가장 안전하게 처방 가능한 약제는?", 
                 options: [
-                    {name:'DPP-4 억제제 (DPP-4i)', score:1, msg:'정답! 저혈당 위험이 극히 낮아 노쇠한 고령 환자에게 가장 안전하고 표준적인 처방입니다.'}, 
+                    {name:'DPP-4 억제제 (DPP-4i)', score:1, msg:'정답! 저혈당 위험이 극히 낮아 노쇠한 고령 환자의 안전한 혈당 관리를 위한 최선의 선택입니다.'}, 
                     {name:'글리메피리드 (SU)', score:0, msg:'고령자에게 심각하고 지속적인 저혈당을 유발하여 사망 위험을 높일 수 있습니다.'}, 
-                    {name:'메트포르민 고용량', score:0, msg:'위장 장애와 식욕 부진을 유발하여 전신 상태를 악화시킬 수 있습니다.'}
+                    {name:'메트포르민 고용량', score:0, msg:'위장 장애와 식욕 부진을 유발하여 전신 상태를 급격히 악화시킬 수 있습니다.'}
                 ] 
             }
         ];
 
         let state = { currentIdx: 0, score: 0, userInfo: {} };
 
+        // [1] 등록
         document.getElementById('reg-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('start-btn');
-            btn.innerText = "AUTHENTICATING...";
-            btn.disabled = true;
+            btn.innerText = "AUTHENTICATING..."; btn.disabled = true;
             try {
                 await signInAnonymously(auth);
                 state.userInfo = {
@@ -265,22 +274,34 @@
                 document.getElementById('step-game').classList.add('active');
                 renderCase();
             } catch (err) {
-                alert("서버 연결 실패. Firebase Anonymous Auth 설정을 확인하세요.");
+                alert("서버 연결 실패. 파이어베이스의 'Anonymous' 설정을 확인하세요.");
                 btn.innerText = "Training Start"; btn.disabled = false;
             }
         };
 
+        // [2] 렌더링
         const renderCase = () => {
             const c = cases[state.currentIdx];
             document.getElementById('current-num').innerText = state.currentIdx + 1;
             document.getElementById('current-score').innerText = state.score;
             document.getElementById('case-description').innerText = c.desc;
             
+            document.getElementById('p-title').innerText = c.title;
             document.getElementById('p-meta').innerText = c.meta;
             document.getElementById('val-hba1c').innerText = c.hba1c;
             document.getElementById('val-egfr').innerText = c.egfr;
             document.getElementById('val-bmi').innerText = c.bmi;
             document.getElementById('val-age').innerText = c.age;
+            
+            const imgEl = document.getElementById('p-image');
+            const errorBox = document.getElementById('img-error-msg');
+            imgEl.src = c.img;
+            imgEl.style.display = "block";
+            errorBox.style.display = "none";
+            imgEl.onerror = () => {
+                imgEl.style.display = "none";
+                errorBox.style.display = "flex";
+            };
             
             updateRadarChart(c);
 
@@ -288,7 +309,7 @@
             container.innerHTML = '';
             c.options.forEach(opt => {
                 const b = document.createElement('div');
-                b.className = "option-card bg-white p-7 rounded-[2.2rem] font-bold text-gray-700 shadow-sm border-2 border-transparent text-[17px] leading-snug text-left";
+                b.className = "option-card bg-white p-7 rounded-[2.2rem] font-bold text-gray-700 shadow-sm border-2 border-transparent text-[16px] leading-snug text-left";
                 b.innerText = opt.name;
                 b.onclick = () => {
                     state.score += opt.score;
@@ -319,76 +340,56 @@
             document.getElementById('radar-polygon').setAttribute('points', `${p1.x},${p1.y} ${p2.x},${p2.y} ${p3.x},${p3.y} ${p4.x},${p4.y}`);
         };
 
+        // [3] 종료 및 저장
         const finish = async () => {
             document.getElementById('step-game').classList.remove('active');
             document.getElementById('step-result').classList.add('active');
             document.getElementById('final-score').innerText = state.score;
-            document.getElementById('save-status').innerText = "SYCHRONIZING DATA...";
-            
+            document.getElementById('save-status').innerText = "SYNCHRONIZING DATA...";
             try {
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', collectionName), {
-                    ...state.userInfo,
-                    score: state.score,
-                    timestamp: serverTimestamp()
+                    ...state.userInfo, score: state.score, timestamp: serverTimestamp()
                 });
                 document.getElementById('save-status').innerText = "✓ 모든 데이터가 서버에 기록되었습니다.";
             } catch (e) {
-                document.getElementById('save-status').innerText = "SYNC FAILED: CHECK FIREBASE RULES";
+                document.getElementById('save-status').innerText = "SYNC FAILED";
             }
         };
 
-        window.showAdmin = () => {
-            document.getElementById('admin-modal').style.display = 'flex';
-            window.refreshData();
-        };
+        window.showAdmin = () => { document.getElementById('admin-modal').style.display = 'flex'; window.refreshData(); };
         window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
 
         window.refreshData = async () => {
             const tbody = document.getElementById('admin-tbody');
-            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-300 font-bold uppercase tracking-widest">Syncing Database...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-300 font-bold">Syncing...</td></tr>';
             try {
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collectionName));
                 let all = []; snap.forEach(d => all.push(d.data()));
                 all.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
-                
                 tbody.innerHTML = '';
-                if (all.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400 font-medium">기록이 없습니다.</td></tr>';
-                    return;
-                }
-
                 all.forEach(item => {
-                    const dts = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
+                    const dts = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR') : '-';
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-gray-50 transition-all text-left";
-                    tr.innerHTML = `
-                        <td class="py-6 text-[10px] text-gray-400 font-bold uppercase tracking-tight">${dts}</td>
-                        <td class="py-6 text-left"><div class="font-black text-gray-800 text-sm">${item.name}</div><div class="text-[10px] text-gray-400 font-mono">${item.empId}</div></td>
-                        <td class="py-6 text-[10px] text-gray-500 font-bold uppercase tracking-tighter text-left">${item.dept}/${item.team}</td>
-                        <td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs">${item.score}</span></td>
-                    `;
+                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold uppercase tracking-tight">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left">${item.name} (${item.empId})</td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase tracking-tighter text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs">${item.score}</span></td>`;
                     tbody.appendChild(tr);
                 });
-            } catch (e) {
-                tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase">Access Denied.</td></tr>';
-            }
+            } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black">Access Denied.</td></tr>'; }
         };
 
         window.exportCSV = async () => {
-            try {
-                const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collectionName));
-                let csv = "\ufeffDATE,NAME,ID,DEPT,TEAM,SCORE\n";
-                snap.forEach(d => {
-                    const i = d.data();
-                    const dts = i.timestamp ? new Date(i.timestamp.seconds * 1000).toLocaleString('ko-KR') : '-';
-                    csv += `"${dts}","${i.name}","${i.empId}","${i.dept}","${i.team}","${i.score}"\n`;
-                });
-                const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-                const link = document.createElement("a");
-                link.href = URL.createObjectURL(blob);
-                link.download = `DCAMP_CERT_REPORT.csv`;
-                link.click();
-            } catch (e) { alert("EXPORT ERROR"); }
+            const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collectionName));
+            let csv = "\ufeffDATE,NAME,ID,DEPT,TEAM,SCORE\n";
+            snap.forEach(d => {
+                const i = d.data();
+                const dts = i.timestamp ? new Date(i.timestamp.seconds * 1000).toLocaleString('ko-KR') : '-';
+                csv += `"${dts}","${i.name}","${i.empId}","${i.dept}","${i.team}","${i.score}"\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = `DCAMP_CERT_REPORT.csv`;
+            link.click();
         };
     </script>
 </body>
