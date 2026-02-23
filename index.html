@@ -13,7 +13,6 @@
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .option-card { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: 2px solid #f1f5f9; }
         .option-card:hover { transform: translateY(-4px); border-color: #2563eb; background-color: #eff6ff; box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.2); }
-        .chart-bar { transition: width 1.2s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .data-card { background: white; border-radius: 2.5rem; box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05); border: 1px solid #edf2f7; }
         #radar-polygon { transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1); }
         .img-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; background: linear-gradient(transparent, rgba(0,0,0,0.8)); color: white; text-align: left; }
@@ -98,11 +97,11 @@
                                 <div id="val-egfr" class="text-xl font-black text-blue-600 tracking-tighter font-sans"></div>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">BMI</div>
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">BMI</div>
                                 <div id="val-bmi" class="text-xl font-black text-gray-800 tracking-tighter font-sans"></div>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">Age</div>
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">Age</div>
                                 <div id="val-age" class="text-xl font-black text-gray-800 tracking-tighter font-sans"></div>
                             </div>
                         </div>
@@ -129,15 +128,15 @@
             <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic text-center uppercase tracking-tight">모든 응시 결과는 <br><span class="text-blue-600 font-black tracking-tight">D-CAMP CENTRAL SERVER</span>로 전송되었습니다.</p>
             
             <div class="bg-gray-900 p-14 rounded-[3.5rem] mb-12 shadow-2xl border-b-8 border-blue-600 text-left relative overflow-hidden text-center">
-                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest">TOTAL CERTIFICATION SCORE</div>
+                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest font-sans">TOTAL CERTIFICATION SCORE</div>
                 <div class="text-9xl font-black text-white leading-none tracking-tighter font-sans"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium font-sans">/ 5</span></div>
             </div>
             
-            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic"></p>
+            <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic font-sans"></p>
             
             <div class="flex flex-col space-y-4 max-w-xs mx-auto">
                 <button onclick="requestAdminAccess()" class="bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 tracking-tight">📋 전체 응시 기록 확인</button>
-                <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase tracking-widest">↺ RETAKE TRAINING</button>
+                <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase tracking-widest font-sans">↺ RETAKE TRAINING</button>
             </div>
         </div>
 
@@ -170,14 +169,14 @@
         <div id="password-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-6 z-[300]">
             <div class="bg-white rounded-[3rem] p-10 max-w-sm w-full shadow-2xl text-center">
                 <div class="text-5xl mb-6">🔒</div>
-                <h3 class="text-2xl font-black mb-2 text-gray-800">관리자 인증</h3>
-                <p class="text-gray-500 mb-8 font-medium text-sm">전체 기록 확인을 위해 비밀번호를 입력하세요.</p>
-                <input type="password" id="admin-pw-input" class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-center text-xl font-bold tracking-[0.5em] mb-6" placeholder="****">
+                <h3 class="text-2xl font-black mb-2 text-gray-800 font-sans">관리자 인증</h3>
+                <p class="text-gray-500 mb-8 font-medium text-sm font-sans">전체 기록 확인을 위해 비밀번호를 입력하세요.</p>
+                <input type="password" id="admin-pw-input" class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-center text-xl font-bold tracking-[0.5em] mb-6 font-sans" placeholder="****">
                 <div class="flex space-x-3">
-                    <button onclick="closePasswordModal()" class="flex-1 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold hover:bg-gray-200">취소</button>
-                    <button onclick="checkAdminPassword()" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700">확인</button>
+                    <button onclick="closePasswordModal()" class="flex-1 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold hover:bg-gray-200 font-sans">취소</button>
+                    <button onclick="checkAdminPassword()" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700 font-sans">확인</button>
                 </div>
-                <p id="pw-error" class="text-red-500 text-xs mt-4 font-bold hidden">비밀번호가 올바르지 않습니다.</p>
+                <p id="pw-error" class="text-red-500 text-xs mt-4 font-bold hidden font-sans">비밀번호가 올바르지 않습니다.</p>
             </div>
         </div>
 
@@ -188,8 +187,8 @@
         <div class="bg-white rounded-[4rem] p-14 max-w-sm w-full shadow-2xl text-center">
             <div id="modal-icon" class="text-9xl mb-8"></div>
             <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none text-center font-sans uppercase"></h3>
-            <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic text-center"></p>
-            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all uppercase">Next Phase</button>
+            <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic text-center font-sans"></p>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all uppercase font-sans">Next Phase</button>
         </div>
     </div>
 
@@ -198,7 +197,6 @@
         import { getFirestore, collection, addDoc, getDocs, serverTimestamp, query } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
         import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-        // 사용자 Firebase 설정
         const firebaseConfig = {
             apiKey: "AIzaSyB475AzDr96EP6I7YsyZx3OjnYDMuMaq7k",
             authDomain: "diabetes-sales.firebaseapp.com",
@@ -211,10 +209,9 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "d-camp-v200-final"; 
-        const collectionName = "diabetes_dcamp_results_v200";
+        const appId = "d-camp-final-v300"; 
+        const collectionName = "diabetes_dcamp_results_v300";
 
-        // 문제 데이터 구성 (최신 요청 반영)
         const cases = [
             { 
                 age: '-', hba1c: '-', egfr: '-', bmi: '-', 
@@ -268,7 +265,44 @@
 
         let state = { currentIdx: 0, score: 0, userInfo: {} };
 
-        // [1] 등록
+        // [전역 함수 등록] onclick에서 사용 가능하도록 함
+        window.requestAdminAccess = () => {
+            const modal = document.getElementById('password-modal');
+            modal.style.display = 'flex';
+            document.getElementById('admin-pw-input').value = '';
+            document.getElementById('pw-error').classList.add('hidden');
+            document.getElementById('admin-pw-input').focus();
+        };
+
+        window.closePasswordModal = () => {
+            document.getElementById('password-modal').style.display = 'none';
+        };
+
+        window.checkAdminPassword = () => {
+            const input = document.getElementById('admin-pw-input').value;
+            if (input === '1024') {
+                window.closePasswordModal();
+                showAdmin();
+            } else {
+                document.getElementById('pw-error').classList.remove('hidden');
+            }
+        };
+
+        const showAdmin = () => {
+            document.getElementById('admin-modal').style.display = 'flex';
+            window.refreshData();
+        };
+
+        window.closeAdmin = () => {
+            document.getElementById('admin-modal').style.display = 'none';
+        };
+
+        // 엔터키 지원
+        document.getElementById('admin-pw-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') window.checkAdminPassword();
+        });
+
+        // 등록 처리
         document.getElementById('reg-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('start-btn');
@@ -287,13 +321,11 @@
             } catch (err) { alert("연결 실패"); btn.innerText = "START"; btn.disabled = false; }
         };
 
-        // [2] 렌더링
         const renderCase = () => {
             const c = cases[state.currentIdx];
             document.getElementById('current-num').innerText = state.currentIdx + 1;
             document.getElementById('current-score').innerText = state.score;
             document.getElementById('case-description').innerText = c.desc;
-            
             document.getElementById('p-title').innerText = c.title;
             document.getElementById('p-meta').innerText = c.meta;
             document.getElementById('val-hba1c').innerText = c.hba1c;
@@ -365,45 +397,9 @@
                 await addDoc(collection(db, 'artifacts', appId, 'public', 'data', collectionName), {
                     ...state.userInfo, score: state.score, timestamp: serverTimestamp()
                 });
-                document.getElementById('save-status').innerText = "✓ 기록이 서버에 안전하게 저장되었습니다.";
+                document.getElementById('save-status').innerText = "✓ 서버 동기화 완료";
             } catch (e) { document.getElementById('save-status').innerText = "저장 실패 (네트워크 확인)"; }
         };
-
-        // --- 관리자 접근 제어 (비밀번호) ---
-        window.requestAdminAccess = () => {
-            document.getElementById('password-modal').classList.remove('hidden');
-            document.getElementById('password-modal').classList.add('flex');
-            document.getElementById('admin-pw-input').value = '';
-            document.getElementById('pw-error').classList.add('hidden');
-            document.getElementById('admin-pw-input').focus();
-        };
-
-        window.closePasswordModal = () => {
-            document.getElementById('password-modal').classList.remove('flex');
-            document.getElementById('password-modal').classList.add('hidden');
-        };
-
-        window.checkAdminPassword = () => {
-            const input = document.getElementById('admin-pw-input').value;
-            if (input === '1024') {
-                closePasswordModal();
-                showAdmin();
-            } else {
-                document.getElementById('pw-error').classList.remove('hidden');
-            }
-        };
-
-        // 엔터키 지원
-        document.getElementById('admin-pw-input').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') checkAdminPassword();
-        });
-
-        const showAdmin = () => { 
-            document.getElementById('admin-modal').style.display = 'flex'; 
-            window.refreshData(); 
-        };
-        
-        window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
 
         window.refreshData = async () => {
             const tbody = document.getElementById('admin-tbody');
@@ -414,14 +410,14 @@
                 all.sort((a,b) => (b.timestamp?.seconds || 0) - (a.timestamp?.seconds || 0));
                 tbody.innerHTML = '';
                 if (all.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400">기록이 없습니다.</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400 font-sans">기록이 없습니다.</td></tr>';
                     return;
                 }
                 all.forEach(item => {
                     const dts = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-gray-50 transition-all text-left";
-                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold font-sans">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left"><div class="leading-none">${item.name}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${item.empId}</div></td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase text-left text-left text-left text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs font-sans">${item.score}</span></td>`;
+                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold font-sans">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left"><div class="leading-none">${item.name}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${item.empId}</div></td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase text-left text-left text-left text-left font-sans">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs font-sans">${item.score}</span></td>`;
                     tbody.appendChild(tr);
                 });
             } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase font-sans">Access Denied.</td></tr>'; }
