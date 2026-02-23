@@ -29,7 +29,7 @@
                     <span class="text-5xl font-[900] italic tracking-tighter uppercase">D-CAMP</span>
                 </div>
                 <h1 class="text-3xl font-black text-gray-800 tracking-tight leading-tight font-sans">당뇨약 처방 시뮬레이션</h1>
-                <p class="text-gray-400 mt-3 font-semibold uppercase tracking-widest text-xs">Medical Sales Expert Training System</p>
+                <p class="text-gray-400 mt-3 font-semibold uppercase tracking-widest text-xs tracking-tight">Medical Sales Expert Training System</p>
             </div>
             
             <form id="reg-form" class="space-y-4 max-w-sm mx-auto text-left">
@@ -56,9 +56,7 @@
                 </div>
             </div>
 
-            <!-- 시각화 메인 보드 (1~3번 문제는 숨김 처리됨) -->
             <div id="visual-board" class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8 max-w-5xl mx-auto">
-                <!-- 이미지 영역 -->
                 <div class="lg:col-span-5 data-card overflow-hidden relative">
                     <div id="img-loading-box" class="absolute inset-0 flex items-center justify-center bg-slate-50 text-slate-300 text-xs font-bold animate-pulse">사진 파일 로딩 중...</div>
                     <img id="p-image" src="" alt="환자 이미지" class="w-full h-full object-cover min-h-[420px] relative z-10 hidden">
@@ -74,7 +72,6 @@
                     </div>
                 </div>
                 
-                <!-- 데이터 영역 -->
                 <div class="lg:col-span-7 data-card p-10 md:p-12 flex flex-col justify-center">
                     <div class="flex flex-col md:flex-row items-center gap-12 text-left">
                         <div class="w-full md:w-1/2 flex justify-center">
@@ -92,28 +89,27 @@
                             </svg>
                         </div>
                         <div class="w-full md:w-1/2 grid grid-cols-2 gap-4 text-left font-sans">
-                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">HbA1c (%)</div>
-                                <div id="val-hba1c" class="text-2xl font-black text-red-500 tracking-tighter"></div>
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">HbA1c (%)</div>
+                                <div id="val-hba1c" class="text-2xl font-black text-red-500 tracking-tighter font-sans"></div>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">eGFR</div>
-                                <div id="val-egfr" class="text-xl font-black text-blue-600 tracking-tighter"></div>
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">eGFR</div>
+                                <div id="val-egfr" class="text-xl font-black text-blue-600 tracking-tighter font-sans"></div>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">BMI</div>
-                                <div id="val-bmi" class="text-xl font-black text-gray-800 tracking-tighter"></div>
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">BMI</div>
+                                <div id="val-bmi" class="text-xl font-black text-gray-800 tracking-tighter font-sans"></div>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">Age</div>
-                                <div id="val-age" class="text-xl font-black text-gray-800 tracking-tighter"></div>
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">Age</div>
+                                <div id="val-age" class="text-xl font-black text-gray-800 tracking-tighter font-sans"></div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- 케이스 텍스트 및 선택지 -->
             <div class="max-w-4xl mx-auto">
                 <div class="p-8 bg-white rounded-[2.5rem] border-2 border-blue-50 shadow-sm mb-8 relative overflow-hidden text-left">
                     <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
@@ -133,14 +129,14 @@
             <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic text-center uppercase tracking-tight">모든 응시 결과는 <br><span class="text-blue-600 font-black tracking-tight">D-CAMP CENTRAL SERVER</span>로 전송되었습니다.</p>
             
             <div class="bg-gray-900 p-14 rounded-[3.5rem] mb-12 shadow-2xl border-b-8 border-blue-600 text-left relative overflow-hidden text-center">
-                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none">TOTAL CERTIFICATION SCORE</div>
-                <div class="text-9xl font-black text-white leading-none tracking-tighter font-sans"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium">/ 5</span></div>
+                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest">TOTAL CERTIFICATION SCORE</div>
+                <div class="text-9xl font-black text-white leading-none tracking-tighter font-sans"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium font-sans">/ 5</span></div>
             </div>
             
             <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic"></p>
             
             <div class="flex flex-col space-y-4 max-w-xs mx-auto">
-                <button onclick="showAdmin()" class="bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 tracking-tight">📋 전체 응시 기록 확인</button>
+                <button onclick="requestAdminAccess()" class="bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 tracking-tight">📋 전체 응시 기록 확인</button>
                 <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase tracking-widest">↺ RETAKE TRAINING</button>
             </div>
         </div>
@@ -151,7 +147,7 @@
                 <div class="flex justify-between items-center mb-10">
                     <div>
                         <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3 italic uppercase font-sans">D-CAMP Report</h3>
-                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black font-sans">Real-time Result Tracking</p>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black font-sans text-left">Real-time Result Tracking</p>
                     </div>
                     <button onclick="closeAdmin()" class="text-gray-300 hover:text-gray-800 text-6xl transition-colors">&times;</button>
                 </div>
@@ -162,22 +158,38 @@
                 <div class="overflow-y-auto flex-1 pr-4 custom-scrollbar">
                     <table class="w-full text-left">
                         <thead class="sticky top-0 bg-white text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-4 text-left">
-                            <tr><th class="pb-6">Date</th><th class="pb-6 text-left">Name (ID)</th><th class="pb-6 text-left text-left">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
+                            <tr><th class="pb-6">Date</th><th class="pb-6 text-left">Name (ID)</th><th class="pb-6 text-left">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
                         </thead>
                         <tbody id="admin-tbody" class="text-sm divide-y divide-gray-50 text-left"></tbody>
                     </table>
                 </div>
             </div>
         </div>
+
+        <!-- [5] 관리자 비밀번호 모달 -->
+        <div id="password-modal" class="fixed inset-0 bg-black/70 backdrop-blur-md hidden items-center justify-center p-6 z-[300]">
+            <div class="bg-white rounded-[3rem] p-10 max-w-sm w-full shadow-2xl text-center">
+                <div class="text-5xl mb-6">🔒</div>
+                <h3 class="text-2xl font-black mb-2 text-gray-800">관리자 인증</h3>
+                <p class="text-gray-500 mb-8 font-medium text-sm">전체 기록 확인을 위해 비밀번호를 입력하세요.</p>
+                <input type="password" id="admin-pw-input" class="w-full px-6 py-4 bg-gray-50 border-2 border-gray-100 rounded-2xl outline-none focus:border-blue-600 transition-all text-center text-xl font-bold tracking-[0.5em] mb-6" placeholder="****">
+                <div class="flex space-x-3">
+                    <button onclick="closePasswordModal()" class="flex-1 bg-gray-100 text-gray-500 py-4 rounded-2xl font-bold hover:bg-gray-200">취소</button>
+                    <button onclick="checkAdminPassword()" class="flex-1 bg-blue-600 text-white py-4 rounded-2xl font-bold shadow-lg hover:bg-blue-700">확인</button>
+                </div>
+                <p id="pw-error" class="text-red-500 text-xs mt-4 font-bold hidden">비밀번호가 올바르지 않습니다.</p>
+            </div>
+        </div>
+
     </div>
 
     <!-- Feedback Modal -->
     <div id="feedback-modal" class="fixed inset-0 bg-black/80 backdrop-blur-xl hidden items-center justify-center p-6 z-[100]">
         <div class="bg-white rounded-[4rem] p-14 max-w-sm w-full shadow-2xl text-center">
             <div id="modal-icon" class="text-9xl mb-8"></div>
-            <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none text-center uppercase"></h3>
+            <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none text-center font-sans uppercase"></h3>
             <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic text-center"></p>
-            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all uppercase">Next Case</button>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all uppercase">Next Phase</button>
         </div>
     </div>
 
@@ -199,37 +211,37 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "d-camp-v150-final"; 
-        const collectionName = "diabetes_dcamp_results_v150";
+        const appId = "d-camp-v200-final"; 
+        const collectionName = "diabetes_dcamp_results_v200";
 
-        // 요청 기반 문제 데이터 재구성
+        // 문제 데이터 구성 (최신 요청 반영)
         const cases = [
             { 
                 age: '-', hba1c: '-', egfr: '-', bmi: '-', 
                 img: "case1.png", title: "O/X 퀴즈", meta: "HbA1c Guidelines",
-                desc: "[설명] 당화혈색소(HbA1c)가 7.0% 이상인 경우에는 처음부터 메트포르민(Metformin)을 포함한 2제 병용 요법의 급여가 인정된다.", 
+                desc: "[질문] 다음 설명이 옳으면 O, 틀리면 X를 선택하십시오.\n\n\"당화혈색소(HbA1c)가 7.0% 이상인 경우에는 처음부터 메트포르민(Metformin)을 포함한 2제 병용 요법의 급여가 인정된다.\"", 
                 options: [
-                    {name:'O (그렇다)', score:0, msg:'틀렸습니다. 초기 병용요법 급여 기준은 보통 HbA1c 7.5% 이상입니다.'}, 
-                    {name:'X (아니다)', score:1, msg:'Excellent'}
+                    {name:'O (옳다)', score:0, msg:'Incorrect. 초기 병용요법 급여 인정 기준은 보통 7.5% 이상입니다.'}, 
+                    {name:'X (틀리다)', score:1, msg:'Excellent'}
                 ] 
             },
             { 
                 age: '-', hba1c: '-', egfr: '-', bmi: '-', 
                 img: "case2.png", title: "O/X 퀴즈", meta: "Insurance Policy",
-                desc: "[설명] 경구용 당뇨병 약제는 최대 3종까지만 급여가 인정되며, 4종 처방 시 1종은 전액 본인 부담으로 처리한다.", 
+                desc: "[질문] 다음 설명이 옳으면 O, 틀리면 X를 선택하십시오.\n\n\"경구용 당뇨병 약제는 최대 3종까지만 급여가 인정되며, 4종 처방 시 1종은 전액 본인 부담으로 처리한다.\"", 
                 options: [
-                    {name:'O (그렇다)', score:1, msg:'Excellent'}, 
-                    {name:'X (아니다)', score:0, msg:'틀렸습니다. 현재 국내 기준 상 경구제는 3제 요법까지 보험 급여가 인정됩니다.'}
+                    {name:'X (틀리다)', score:0, msg:'Incorrect. 국내 급여 기준 상 경구제는 최대 3종까지만 인정됩니다.'}, 
+                    {name:'O (옳다)', score:1, msg:'Excellent'}
                 ] 
             },
             { 
                 age: '-', hba1c: '-', egfr: '-', bmi: '-', 
                 img: "case3.png", title: "수치 선택 퀴즈", meta: "Clinical Values",
-                desc: "① 자누비아는 eGFR [   ] 이상일 때, 용량 조절 없이 처방 가능하다.\n② 당뇨병학회 가이드라인 상, 메트포르민은 eGFR [   ] 미만일 때, 처방 금기이다.", 
+                desc: "[질문] 다음 빈칸에 들어갈 숫자를 각각 고르시오.\n\n① 자누비아는 eGFR [   ] 이상일 때, 용량 조절 없이 처방 가능하다.\n② 가이드라인 상, 메트포르민은 eGFR [   ] 미만일 때, 처방 금기이다.", 
                 options: [
-                    {name:'① 60 / ② 30', score:0, msg:'틀렸습니다. 자누비아는 45 이상일 때 용량 조절이 필요 없습니다.'}, 
-                    {name:'① 45 / ② 30', score:1, msg:'Excellent'},
-                    {name:'① 45 / ② 15', score:0, msg:'틀렸습니다. 메트포르민은 eGFR 30 미만 시 금기입니다.'}
+                    {name:'① 60 / ② 30', score:0, msg:'Incorrect. 자누비아의 용량 조절 불필요 기준은 45입니다.'}, 
+                    {name:'① 45 / ② 15', score:0, msg:'Incorrect. 메트포르민 금기 기준은 30 미만입니다.'},
+                    {name:'① 45 / ② 30', score:1, msg:'Excellent'}
                 ] 
             },
             { 
@@ -237,9 +249,9 @@
                 img: "case4.png", title: "처방 최적화 전략", meta: "Patient Case Analysis",
                 desc: "이미 메트포르민과 다파글리플로진 10mg을 복용 중인 환자입니다. 3개월 후 HbA1c 7.2%로 목표 혈당에 도달하지 않았습니다. 혈당을 추가적으로 낮추기 위한 최적의 처방 전략은?", 
                 options: [
-                    {name:'다파글리플로진 10mg 처방 유지', score:0, msg:'Incorrect'}, 
                     {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'Excellent'}, 
-                    {name:'메트포르민 용량만 50% 감량 처방', score:0, msg:'Incorrect'}
+                    {name:'다파글리플로진 10mg 처방 유지', score:0, msg:'Incorrect'}, 
+                    {name:'메트포르민 용량만 50% 감량', score:0, msg:'Incorrect'}
                 ] 
             },
             { 
@@ -247,9 +259,9 @@
                 img: "case5.png", title: "보험 급여 기준", meta: "Insurance Coverage",
                 desc: "젊고 비만한 여성 환자가 당뇨 초진으로 내원했습니다. HbA1c 7.8%입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '보험 급여'가 가능한 기준은 무엇입니까?", 
                 options: [
-                    {name:'무조건 2제 이상 병용해야만 급여 가능', score:0, msg:'Incorrect'}, 
-                    {name:'HbA1c 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'Excellent'}, 
-                    {name:'단독 처방은 어떤 경우에도 비급여', score:0, msg:'Incorrect'}
+                    {name:'무조건 2제 이상 병용해야 급여 인정', score:0, msg:'Incorrect'}, 
+                    {name:'단독 처방은 어떤 경우에도 비급여', score:0, msg:'Incorrect'},
+                    {name:'HbA1c 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'Excellent'}
                 ] 
             }
         ];
@@ -289,13 +301,11 @@
             document.getElementById('val-bmi').innerText = c.bmi;
             document.getElementById('val-age').innerText = c.age;
             
-            // [요청 반영] 1~3번 문제는 이미지/그래프 보드 자체를 숨김
             const visualBoard = document.getElementById('visual-board');
             if (state.currentIdx < 3) {
                 visualBoard.style.display = "none";
             } else {
                 visualBoard.style.display = "grid";
-                // 사진 경로 매칭
                 const imgEl = document.getElementById('p-image');
                 imgEl.src = "./" + c.img + "?v=" + new Date().getTime();
                 imgEl.onload = () => { document.getElementById('img-loading-box').style.display="none"; imgEl.style.display="block"; };
@@ -346,7 +356,7 @@
             document.getElementById('step-game').classList.remove('active');
             document.getElementById('step-result').classList.add('active');
             document.getElementById('final-score').innerText = state.score;
-            document.getElementById('save-status').innerText = "Syncing with cloud...";
+            document.getElementById('save-status').innerText = "데이터 저장 중...";
             saveResult();
         };
 
@@ -359,12 +369,45 @@
             } catch (e) { document.getElementById('save-status').innerText = "저장 실패 (네트워크 확인)"; }
         };
 
-        window.showAdmin = () => { document.getElementById('admin-modal').style.display = 'flex'; window.refreshData(); };
+        // --- 관리자 접근 제어 (비밀번호) ---
+        window.requestAdminAccess = () => {
+            document.getElementById('password-modal').classList.remove('hidden');
+            document.getElementById('password-modal').classList.add('flex');
+            document.getElementById('admin-pw-input').value = '';
+            document.getElementById('pw-error').classList.add('hidden');
+            document.getElementById('admin-pw-input').focus();
+        };
+
+        window.closePasswordModal = () => {
+            document.getElementById('password-modal').classList.remove('flex');
+            document.getElementById('password-modal').classList.add('hidden');
+        };
+
+        window.checkAdminPassword = () => {
+            const input = document.getElementById('admin-pw-input').value;
+            if (input === '1024') {
+                closePasswordModal();
+                showAdmin();
+            } else {
+                document.getElementById('pw-error').classList.remove('hidden');
+            }
+        };
+
+        // 엔터키 지원
+        document.getElementById('admin-pw-input').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkAdminPassword();
+        });
+
+        const showAdmin = () => { 
+            document.getElementById('admin-modal').style.display = 'flex'; 
+            window.refreshData(); 
+        };
+        
         window.closeAdmin = () => document.getElementById('admin-modal').style.display = 'none';
 
         window.refreshData = async () => {
             const tbody = document.getElementById('admin-tbody');
-            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-300 font-bold uppercase tracking-widest animate-pulse">Syncing...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400 font-bold uppercase tracking-widest animate-pulse">Syncing...</td></tr>';
             try {
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collectionName));
                 let all = []; snap.forEach(d => all.push(d.data()));
@@ -378,7 +421,7 @@
                     const dts = item.timestamp ? new Date(item.timestamp.seconds * 1000).toLocaleString('ko-KR', {month:'short', day:'numeric', hour:'2-digit', minute:'2-digit'}) : '-';
                     const tr = document.createElement('tr');
                     tr.className = "hover:bg-gray-50 transition-all text-left";
-                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold font-sans">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left"><div class="leading-none">${item.name}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${item.empId}</div></td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs font-sans">${item.score}</span></td>`;
+                    tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold font-sans">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left"><div class="leading-none">${item.name}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${item.empId}</div></td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase text-left text-left text-left text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs font-sans">${item.score}</span></td>`;
                     tbody.appendChild(tr);
                 });
             } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase font-sans">Access Denied.</td></tr>'; }
