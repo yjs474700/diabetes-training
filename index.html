@@ -56,8 +56,8 @@
                 </div>
             </div>
 
-            <!-- 시각화 메인 보드 -->
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8 max-w-5xl mx-auto">
+            <!-- 시각화 메인 보드 (1~3번 문제는 숨김 처리됨) -->
+            <div id="visual-board" class="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-8 max-w-5xl mx-auto">
                 <!-- 이미지 영역 -->
                 <div class="lg:col-span-5 data-card overflow-hidden relative">
                     <div id="img-loading-box" class="absolute inset-0 flex items-center justify-center bg-slate-50 text-slate-300 text-xs font-bold animate-pulse">사진 파일 로딩 중...</div>
@@ -70,7 +70,7 @@
                     </div>
                     <div class="img-overlay z-30">
                         <div id="p-meta" class="text-[10px] font-bold opacity-70 mb-1 tracking-widest uppercase"></div>
-                        <div id="p-title" class="text-2xl font-black leading-tight tracking-tighter text-left">Patient Profile</div>
+                        <div id="p-title" class="text-2xl font-black leading-tight tracking-tighter text-left">Clinical Profile</div>
                     </div>
                 </div>
                 
@@ -91,13 +91,13 @@
                                 <polygon id="radar-polygon" points="" fill="rgba(37, 99, 235, 0.25)" stroke="#2563eb" stroke-width="3" stroke-linejoin="round" />
                             </svg>
                         </div>
-                        <div class="w-full md:w-1/2 grid grid-cols-2 gap-4 text-left">
+                        <div class="w-full md:w-1/2 grid grid-cols-2 gap-4 text-left font-sans">
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">HbA1c (%)</div>
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">HbA1c (%)</div>
                                 <div id="val-hba1c" class="text-2xl font-black text-red-500 tracking-tighter"></div>
                             </div>
-                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100">
-                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest font-sans">eGFR</div>
+                            <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
+                                <div class="text-[9px] font-black text-gray-400 uppercase mb-1 tracking-widest">eGFR</div>
                                 <div id="val-egfr" class="text-xl font-black text-blue-600 tracking-tighter"></div>
                             </div>
                             <div class="bg-gray-50 p-4 rounded-2xl border border-gray-100 font-sans">
@@ -113,13 +113,14 @@
                 </div>
             </div>
 
+            <!-- 케이스 텍스트 및 선택지 -->
             <div class="max-w-4xl mx-auto">
                 <div class="p-8 bg-white rounded-[2.5rem] border-2 border-blue-50 shadow-sm mb-8 relative overflow-hidden text-left">
                     <div class="absolute top-0 left-0 w-2 h-full bg-blue-600"></div>
                     <h3 class="text-[11px] font-black text-blue-800 mb-4 uppercase tracking-[0.2em] flex items-center leading-none">
-                        <span class="w-2 h-2 bg-blue-600 rounded-full mr-3 animate-ping"></span> Clinical Record / Medical Note
+                        <span class="w-2 h-2 bg-blue-600 rounded-full mr-3 animate-ping"></span> Question & Guidelines
                     </h3>
-                    <p class="text-[18px] text-gray-700 leading-relaxed font-bold italic" id="case-description"></p>
+                    <p class="text-[20px] text-gray-700 leading-relaxed font-bold italic" id="case-description" style="white-space: pre-wrap;"></p>
                 </div>
                 <div id="options-container" class="space-y-4 mb-20"></div>
             </div>
@@ -132,14 +133,14 @@
             <p class="text-gray-500 mb-12 font-medium text-lg leading-relaxed italic text-center uppercase tracking-tight">모든 응시 결과는 <br><span class="text-blue-600 font-black tracking-tight">D-CAMP CENTRAL SERVER</span>로 전송되었습니다.</p>
             
             <div class="bg-gray-900 p-14 rounded-[3.5rem] mb-12 shadow-2xl border-b-8 border-blue-600 text-left relative overflow-hidden text-center">
-                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none tracking-widest">TOTAL CERTIFICATION SCORE</div>
+                <div class="text-xs text-blue-400 font-bold uppercase tracking-[0.5em] mb-5 leading-none">TOTAL CERTIFICATION SCORE</div>
                 <div class="text-9xl font-black text-white leading-none tracking-tighter font-sans"><span id="final-score">0</span> <span class="text-4xl text-gray-600 font-medium">/ 5</span></div>
             </div>
             
             <p id="save-status" class="text-sm text-blue-600 mb-12 font-black tracking-widest uppercase animate-pulse italic"></p>
             
             <div class="flex flex-col space-y-4 max-w-xs mx-auto">
-                <button onclick="showAdmin()" class="bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100">📋 전체 응시 기록 확인</button>
+                <button onclick="showAdmin()" class="bg-blue-600 text-white py-5 rounded-2xl font-black text-lg hover:bg-blue-700 transition-all shadow-xl shadow-blue-100 tracking-tight">📋 전체 응시 기록 확인</button>
                 <button onclick="location.reload()" class="text-gray-400 font-bold text-sm hover:text-blue-600 underline underline-offset-8 transition-colors uppercase tracking-widest">↺ RETAKE TRAINING</button>
             </div>
         </div>
@@ -150,7 +151,7 @@
                 <div class="flex justify-between items-center mb-10">
                     <div>
                         <h3 class="text-3xl font-black text-gray-800 tracking-tighter leading-none mb-3 italic uppercase font-sans">D-CAMP Report</h3>
-                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black font-sans">All-Employee Result Clustering</p>
+                        <p class="text-xs text-gray-400 font-bold uppercase tracking-widest italic leading-none font-black font-sans">Real-time Result Tracking</p>
                     </div>
                     <button onclick="closeAdmin()" class="text-gray-300 hover:text-gray-800 text-6xl transition-colors">&times;</button>
                 </div>
@@ -161,7 +162,7 @@
                 <div class="overflow-y-auto flex-1 pr-4 custom-scrollbar">
                     <table class="w-full text-left">
                         <thead class="sticky top-0 bg-white text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] border-b pb-4 text-left">
-                            <tr><th class="pb-6">Date</th><th class="pb-6 text-left">Name (ID)</th><th class="pb-6 text-left">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
+                            <tr><th class="pb-6">Date</th><th class="pb-6 text-left">Name (ID)</th><th class="pb-6 text-left text-left">Dept/Team</th><th class="pb-6 text-center">Score</th></tr>
                         </thead>
                         <tbody id="admin-tbody" class="text-sm divide-y divide-gray-50 text-left"></tbody>
                     </table>
@@ -176,7 +177,7 @@
             <div id="modal-icon" class="text-9xl mb-8"></div>
             <h3 id="modal-title" class="text-3xl font-black mb-4 text-gray-800 tracking-tighter leading-none text-center uppercase"></h3>
             <p id="modal-body" class="text-gray-600 mb-12 font-bold leading-relaxed text-[16px] italic text-center"></p>
-            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all uppercase">Next Phase</button>
+            <button id="modal-btn" class="w-full bg-blue-600 text-white py-6 rounded-[2.2rem] font-black text-xl shadow-2xl active:scale-95 transition-all uppercase">Next Case</button>
         </div>
     </div>
 
@@ -198,58 +199,57 @@
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
         const auth = getAuth(app);
-        const appId = "d-camp-final-v70"; 
-        const collectionName = "diabetes_dcamp_results_v70";
+        const appId = "d-camp-v150-final"; 
+        const collectionName = "diabetes_dcamp_results_v150";
 
+        // 요청 기반 문제 데이터 재구성
         const cases = [
             { 
-                age: 52, hba1c: 7.2, egfr: 88, bmi: 27.5, 
-                img: "case1.png", title: "기존 요법 불충분 환자", meta: "KOREAN MALE | 52Y | OVERWEIGHT",
-                desc: "이미 메트포르민과 다파글리플로진 10mg을 복용 중인 환자입니다. 3개월 후 HbA1c 7.2%로 목표 혈당에 도달하지 않았습니다. 최신 가이드라인에 따른 최적의 변경 전략은?", 
+                age: '-', hba1c: '-', egfr: '-', bmi: '-', 
+                img: "case1.png", title: "O/X 퀴즈", meta: "HbA1c Guidelines",
+                desc: "[설명] 당화혈색소(HbA1c)가 7.0% 이상인 경우에는 처음부터 메트포르민(Metformin)을 포함한 2제 병용 요법의 급여가 인정된다.", 
                 options: [
-                    {name:'다파글리플로진 10mg 처방 유지 후 관찰', score:0, msg:'목표 혈당 미도달 시 신속한 약제 조절(Therapeutic Inertia 극복)이 중요합니다.'}, 
-                    {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'정답! 동일 계열 내에서도 강력한 혈당 강하와 CV 혜택이 입증된 고용량 엠파글리플로진 25mg으로의 변경이 권고됩니다.'}, 
-                    {name:'메트포르민 용량만 50% 감량 처방', score:0, msg:'혈당이 높은 상황에서 약제 감량은 권장되지 않습니다.'}
+                    {name:'O (그렇다)', score:0, msg:'틀렸습니다. 초기 병용요법 급여 기준은 보통 HbA1c 7.5% 이상입니다.'}, 
+                    {name:'X (아니다)', score:1, msg:'Excellent'}
+                ] 
+            },
+            { 
+                age: '-', hba1c: '-', egfr: '-', bmi: '-', 
+                img: "case2.png", title: "O/X 퀴즈", meta: "Insurance Policy",
+                desc: "[설명] 경구용 당뇨병 약제는 최대 3종까지만 급여가 인정되며, 4종 처방 시 1종은 전액 본인 부담으로 처리한다.", 
+                options: [
+                    {name:'O (그렇다)', score:1, msg:'Excellent'}, 
+                    {name:'X (아니다)', score:0, msg:'틀렸습니다. 현재 국내 기준 상 경구제는 3제 요법까지 보험 급여가 인정됩니다.'}
+                ] 
+            },
+            { 
+                age: '-', hba1c: '-', egfr: '-', bmi: '-', 
+                img: "case3.png", title: "수치 선택 퀴즈", meta: "Clinical Values",
+                desc: "① 자누비아는 eGFR [   ] 이상일 때, 용량 조절 없이 처방 가능하다.\n② 당뇨병학회 가이드라인 상, 메트포르민은 eGFR [   ] 미만일 때, 처방 금기이다.", 
+                options: [
+                    {name:'① 60 / ② 30', score:0, msg:'틀렸습니다. 자누비아는 45 이상일 때 용량 조절이 필요 없습니다.'}, 
+                    {name:'① 45 / ② 30', score:1, msg:'Excellent'},
+                    {name:'① 45 / ② 15', score:0, msg:'틀렸습니다. 메트포르민은 eGFR 30 미만 시 금기입니다.'}
+                ] 
+            },
+            { 
+                age: 52, hba1c: 7.2, egfr: 88, bmi: 27.5, 
+                img: "case4.png", title: "처방 최적화 전략", meta: "Patient Case Analysis",
+                desc: "이미 메트포르민과 다파글리플로진 10mg을 복용 중인 환자입니다. 3개월 후 HbA1c 7.2%로 목표 혈당에 도달하지 않았습니다. 혈당을 추가적으로 낮추기 위한 최적의 처방 전략은?", 
+                options: [
+                    {name:'다파글리플로진 10mg 처방 유지', score:0, msg:'Incorrect'}, 
+                    {name:'엠파글리플로진 25mg으로 스위칭 및 증량', score:1, msg:'Excellent'}, 
+                    {name:'메트포르민 용량만 50% 감량 처방', score:0, msg:'Incorrect'}
                 ] 
             },
             { 
                 age: 36, hba1c: 7.8, egfr: 98, bmi: 31.2, 
-                img: "case2.png", title: "비만 동반 젊은 여성 초진", meta: "KOREAN FEMALE | 36Y | OBESE",
-                desc: "젊고 비만한 여성 환자가 당뇨 초진으로 내원했습니다. HbA1c 7.8%입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '단독 급여'가 가능한 기준은 무엇입니까?", 
+                img: "case5.png", title: "보험 급여 기준", meta: "Insurance Coverage",
+                desc: "젊고 비만한 여성 환자가 당뇨 초진으로 내원했습니다. HbA1c 7.8%입니다. 2023년 개정된 보험 급여 기준상 SGLT2i '보험 급여'가 가능한 기준은 무엇입니까?", 
                 options: [
-                    {name:'당화혈색소 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'정답! 개정된 고시에 따라 HbA1c 7.5% 이상이거나 메트포르민을 쓸 수 없는 경우 SGLT2i 단독 처방도 보험 급여가 인정됩니다.'}, 
-                    {name:'무조건 2제 이상 병용해야만 급여 가능', score:0, msg:'과거 기준입니다. 현재는 특정 수치 이상이면 단독 급여도 가능합니다.'}, 
-                    {name:'단독 처방은 보험 혜택이 전혀 없음', score:0, msg:'새로운 급여 기준에 의해 단독 처방의 급여 범위가 확대되었습니다.'}
-                ] 
-            },
-            { 
-                age: 65, hba1c: 7.9, egfr: 22, bmi: 23.4, 
-                img: "case3.png", title: "만성 신부전 4단계 환자", meta: "KOREAN MALE | 65Y | CKD STAGE 4",
-                desc: "신기능이 현저히 저하된(eGFR 22 mL/min) 65세 한국인 남성입니다. 유산산증(Lactic Acidosis) 발생 위험으로 인해 이 환자에게 '절대 금기'인 약제는?", 
-                options: [
-                    {name:'리나글립틴 (Linagliptin)', score:0, msg:'리나글립틴은 담즙 배설 약제로 신기능 저하와 무관하게 안전하게 사용 가능합니다.'}, 
-                    {name:'SGLT2 억제제 (SGLT2i)', score:0, msg:'금기에 아니지만 신기능이 낮으면 당 배출 효과가 상실되어 실익이 없습니다.'},
-                    {name:'메트포르민 (Metformin)', score:1, msg:'정답! eGFR 30 mL/min 미만 환자에게 메트포르민은 치명적인 유산산증 위험이 있어 절대 금기입니다.'}
-                ] 
-            },
-            { 
-                age: 58, hba1c: 8.5, egfr: 82, bmi: 30.2, 
-                img: "case4.png", title: "심부전 병력 비만 환자", meta: "KOREAN MALE | 58Y | HF HISTORY",
-                desc: "심부전(Heart Failure) 이력이 있는 58세 비만 환자입니다. 심부전 재입원 예방과 체중 감량 효과를 동시에 기대할 수 있는 1차 선택 약제는?", 
-                options: [
-                    {name:'설포닐우레아 (SU)', score:0, msg:'심부전 보호 혜택이 없으며 오히려 체중 증가를 유발합니다.'}, 
-                    {name:'SGLT2 억제제 (SGLT2i)', score:1, msg:'정답! SGLT2i는 심부전 입원 감소와 체중 감량 효과가 입증된 최적의 1차 선택 옵션입니다.'}, 
-                    {name:'피오글리타존 (TZD)', score:0, msg:'부종 유발 위험으로 심부전 병력이 있는 환자에게는 매우 주의해야 합니다.'}
-                ] 
-            },
-            { 
-                age: 82, hba1c: 7.2, egfr: 58, bmi: 19.5, 
-                img: "case5.png", title: "초고령 저체중 남성", meta: "KOREAN ELDERLY | 82Y | FRAILTY",
-                desc: "82세 한국인 초고령 환자로 마른 체격이며 식사가 불규칙합니다. 저혈당 시 대처가 어려운 이 환자에게 가장 안전하게 처방 가능한 약제는?", 
-                options: [
-                    {name:'글리메피리드 (SU)', score:0, msg:'고령자에게 심각하고 지속적인 저혈당을 유발하여 사망 위험을 높일 수 있습니다.'}, 
-                    {name:'메트포르민 고용량', score:0, msg:'위장 장애와 식욕 부진을 유발하여 전신 상태를 급격히 악화시킬 수 있습니다.'},
-                    {name:'DPP-4 억제제 (DPP-4i)', score:1, msg:'정답! 저혈당 위험이 극히 낮아 노쇠한 고령 환자의 안전한 혈당 관리를 위한 최선의 선택입니다.'}
+                    {name:'무조건 2제 이상 병용해야만 급여 가능', score:0, msg:'Incorrect'}, 
+                    {name:'HbA1c 7.5% 이상 시 SGLT2i 단독 급여 인정', score:1, msg:'Excellent'}, 
+                    {name:'단독 처방은 어떤 경우에도 비급여', score:0, msg:'Incorrect'}
                 ] 
             }
         ];
@@ -260,7 +260,7 @@
         document.getElementById('reg-form').onsubmit = async (e) => {
             e.preventDefault();
             const btn = document.getElementById('start-btn');
-            btn.innerText = "AUTHENTICATING..."; btn.disabled = true;
+            btn.innerText = "AUTH..."; btn.disabled = true;
             try {
                 await signInAnonymously(auth);
                 state.userInfo = {
@@ -272,14 +272,16 @@
                 document.getElementById('step-register').classList.remove('active');
                 document.getElementById('step-game').classList.add('active');
                 renderCase();
-            } catch (err) { alert("접속 실패. 익명 로그인을 확인하세요."); btn.innerText = "START"; btn.disabled = false; }
+            } catch (err) { alert("연결 실패"); btn.innerText = "START"; btn.disabled = false; }
         };
 
+        // [2] 렌더링
         const renderCase = () => {
             const c = cases[state.currentIdx];
             document.getElementById('current-num').innerText = state.currentIdx + 1;
             document.getElementById('current-score').innerText = state.score;
             document.getElementById('case-description').innerText = c.desc;
+            
             document.getElementById('p-title').innerText = c.title;
             document.getElementById('p-meta').innerText = c.meta;
             document.getElementById('val-hba1c').innerText = c.hba1c;
@@ -287,12 +289,19 @@
             document.getElementById('val-bmi').innerText = c.bmi;
             document.getElementById('val-age').innerText = c.age;
             
-            const imgEl = document.getElementById('p-image');
-            imgEl.src = "./" + c.img + "?v=" + new Date().getTime();
-            imgEl.onload = () => { document.getElementById('img-loading-box').style.display="none"; imgEl.style.display="block"; };
-            imgEl.onerror = () => { document.getElementById('img-loading-box').style.display="none"; document.getElementById('img-error-box').style.display="flex"; };
-            
-            updateRadarChart(c);
+            // [요청 반영] 1~3번 문제는 이미지/그래프 보드 자체를 숨김
+            const visualBoard = document.getElementById('visual-board');
+            if (state.currentIdx < 3) {
+                visualBoard.style.display = "none";
+            } else {
+                visualBoard.style.display = "grid";
+                // 사진 경로 매칭
+                const imgEl = document.getElementById('p-image');
+                imgEl.src = "./" + c.img + "?v=" + new Date().getTime();
+                imgEl.onload = () => { document.getElementById('img-loading-box').style.display="none"; imgEl.style.display="block"; };
+                imgEl.onerror = () => { document.getElementById('img-loading-box').style.display="none"; document.getElementById('img-error-box').style.display="flex"; };
+                updateRadarChart(c);
+            }
 
             const container = document.getElementById('options-container');
             container.innerHTML = '';
@@ -320,8 +329,12 @@
 
         const updateRadarChart = (data) => {
             const center = 100, maxR = 80;
-            const sHb = Math.min(1, data.hba1c / 12), sEg = Math.min(1, data.egfr / 100);
-            const sBm = Math.min(1, data.bmi / 45), sAg = Math.min(1, data.age / 100);
+            const h = data.hba1c === '-' ? 0 : parseFloat(data.hba1c);
+            const e = data.egfr === '-' ? 0 : parseFloat(data.egfr);
+            const b = data.bmi === '-' ? 0 : parseFloat(data.bmi);
+            const a = data.age === '-' ? 0 : parseFloat(data.age);
+            const sHb = Math.min(1, h / 12), sEg = Math.min(1, e / 100);
+            const sBm = Math.min(1, b / 45), sAg = Math.min(1, a / 100);
             const p1 = { x: center, y: center - (sHb * maxR) };
             const p2 = { x: center + (sEg * maxR), y: center };
             const p3 = { x: center, y: center + (sBm * maxR) };
@@ -330,13 +343,10 @@
         };
 
         const finish = () => {
-            // [중요] UI를 가장 먼저 바꿉니다. 서버 응답을 기다리지 않습니다.
             document.getElementById('step-game').classList.remove('active');
             document.getElementById('step-result').classList.add('active');
             document.getElementById('final-score').innerText = state.score;
-            document.getElementById('save-status').innerText = "데이터 저장 중...";
-            
-            // 그 다음 백그라운드에서 저장을 시도합니다.
+            document.getElementById('save-status').innerText = "Syncing with cloud...";
             saveResult();
         };
 
@@ -346,9 +356,7 @@
                     ...state.userInfo, score: state.score, timestamp: serverTimestamp()
                 });
                 document.getElementById('save-status').innerText = "✓ 기록이 서버에 안전하게 저장되었습니다.";
-            } catch (e) {
-                document.getElementById('save-status').innerText = "⚠️ 저장 실패 (네트워크 확인)";
-            }
+            } catch (e) { document.getElementById('save-status').innerText = "저장 실패 (네트워크 확인)"; }
         };
 
         window.showAdmin = () => { document.getElementById('admin-modal').style.display = 'flex'; window.refreshData(); };
@@ -356,7 +364,7 @@
 
         window.refreshData = async () => {
             const tbody = document.getElementById('admin-tbody');
-            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-400 font-bold uppercase tracking-widest animate-pulse">Syncing...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-gray-300 font-bold uppercase tracking-widest animate-pulse">Syncing...</td></tr>';
             try {
                 const snap = await getDocs(collection(db, 'artifacts', appId, 'public', 'data', collectionName));
                 let all = []; snap.forEach(d => all.push(d.data()));
@@ -373,7 +381,7 @@
                     tr.innerHTML = `<td class="py-6 text-[10px] text-gray-400 font-bold font-sans">${dts}</td><td class="py-6 font-black text-gray-800 text-sm text-left"><div class="leading-none">${item.name}</div><div class="text-[10px] text-gray-400 font-mono mt-1">${item.empId}</div></td><td class="py-6 text-[10px] text-gray-500 font-bold uppercase text-left">${item.dept}/${item.team}</td><td class="py-6 text-center"><span class="bg-gray-900 text-white px-4 py-2 rounded-xl font-black text-xs font-sans">${item.score}</span></td>`;
                     tbody.appendChild(tr);
                 });
-            } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase">Access Denied.</td></tr>'; }
+            } catch (e) { tbody.innerHTML = '<tr><td colspan="4" class="py-20 text-center text-red-400 font-black italic uppercase font-sans">Access Denied.</td></tr>'; }
         };
 
         window.exportCSV = async () => {
